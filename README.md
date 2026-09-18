@@ -16,7 +16,7 @@ The dev server runs on port 5190 and is exposed on your network, so you can open
 
 - `http://localhost:5190/#/kept`: the Kept recreation. Sign in with the lab account **wade / 1234**
   (it only exists in the mock and protects nothing).
-- `http://localhost:5190/#/kept/m/tsp8f3k2qx`: a published board, no sign-in needed.
+- `http://localhost:5190/#/kept/m/mm7q2x9kfa`: a published board, no sign-in needed.
 - `http://localhost:5190/`: every Base UI docs demo, styled as on base-ui.com. **Dev only.**
 
 Production builds (`pnpm build`, and the Vercel deploy at https://kept-ui.vercel.app) contain Kept

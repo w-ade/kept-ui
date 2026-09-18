@@ -5,9 +5,11 @@ import { Input } from '@base-ui/react/input';
 import {
   ArrowIcon,
   BackLink,
+  ImageFill,
   Separator,
   formatBytes,
   formatDate,
+  fullImageStyle,
   useDocumentTitle,
 } from './parts.tsx';
 import {
@@ -141,6 +143,7 @@ export function KeptReference({
         </div>
         <div className="KeptCol-body">
           <PinCanvas
+            reference={reference}
             pins={reference.pins}
             onAdd={(pin) => save({ pins: [...reference.pins, pin] })}
           />
@@ -303,13 +306,22 @@ function usePinFocus() {
   return React.useContext(PinFocusContext);
 }
 
-function PinCanvas({ pins, onAdd }: { pins: Pin[]; onAdd: (pin: Pin) => void }) {
+function PinCanvas({
+  reference,
+  pins,
+  onAdd,
+}: {
+  reference: Reference;
+  pins: Pin[];
+  onAdd: (pin: Pin) => void;
+}) {
   const { active, requestFocus } = usePinFocus();
   return (
     <div className="KeptCanvas">
       <button
         type="button"
         className="KeptImage KeptImageLarge"
+        style={fullImageStyle(reference)}
         aria-label="Drop a pin on the image"
         onClick={(event) => {
           // Keyboard activation has no pointer position: drop the pin in the center.
@@ -326,6 +338,7 @@ function PinCanvas({ pins, onAdd }: { pins: Pin[]; onAdd: (pin: Pin) => void }) 
           requestFocus(pin.id);
         }}
       >
+        <ImageFill src={reference.imageUrl} eager />
         {pins.map((pin, i) => (
           <span
             key={pin.id}

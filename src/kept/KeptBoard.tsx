@@ -1,7 +1,15 @@
 import * as React from 'react';
 import { Button } from '@base-ui/react/button';
 import { Dialog } from '@base-ui/react/dialog';
-import { ArrowIcon, formatDate, plural, sourceLabel, useDocumentTitle } from './parts.tsx';
+import {
+  ArrowIcon,
+  ImageFill,
+  formatDate,
+  fullImageStyle,
+  plural,
+  sourceLabel,
+  useDocumentTitle,
+} from './parts.tsx';
 import { getBoard, type Board, type Reference } from './repository.ts';
 
 // /m/:token: an unlisted, read-only moodboard. Board shell: no nav, no sign-in.
@@ -64,7 +72,9 @@ export function KeptBoard({ token }: { token: string }) {
               {references.map((r, i) => (
                 <li key={r.id}>
                   <button type="button" className="KeptBoardItem" onClick={() => setOpenIndex(i)}>
-                    <span className="KeptImage" aria-hidden />
+                    <span className="KeptImage" aria-hidden>
+                      <ImageFill src={r.thumbUrl} />
+                    </span>
                     <span className="KeptText1 KeptFigureName">{r.title}</span>
                   </button>
                 </li>
@@ -148,7 +158,12 @@ function Lightbox({
               </div>
 
               <div className="KeptLightboxImage">
-                <span className="KeptImage KeptLightboxSquare" aria-hidden>
+                <span
+                  className="KeptImage KeptLightboxSquare"
+                  style={fullImageStyle(reference)}
+                  aria-hidden
+                >
+                  <ImageFill src={reference.imageUrl} eager />
                   {reference.pins.map((pin, i) => (
                     <span
                       key={pin.id}

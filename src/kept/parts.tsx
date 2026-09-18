@@ -108,3 +108,27 @@ export function formatBytes(bytes: number) {
   }
   return `${value.toFixed(value < 10 ? 1 : 0)} ${units[unit]}`;
 }
+
+// A reference's image filling its box; nothing when there's no file yet (the box stays gray).
+export function ImageFill({ src, eager = false }: { src?: string; eager?: boolean }) {
+  if (!src) return null;
+  return (
+    <img
+      className="KeptImageFill"
+      src={src}
+      alt=""
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      draggable={false}
+    />
+  );
+}
+
+// Full images keep their real shape so pins land where they were dropped; placeholders stay square.
+export function fullImageStyle(r: { imageUrl?: string; width: number; height: number }) {
+  const aspect = r.imageUrl ? r.width / r.height : 1;
+  return {
+    aspectRatio: String(aspect),
+    '--kept-aspect': String(aspect),
+  } as React.CSSProperties;
+}

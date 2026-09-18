@@ -1129,3 +1129,43 @@
     word-break: break-all;
   }
 }
+
+/* ─── Real images ─── */
+@layer components {
+  /* The file fills its box; the gray behind it shows while it loads */
+  .KeptImageFill {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .KeptMosaicCell {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .KeptImage {
+    overflow: hidden;
+  }
+
+  /* Pins and badges sit above the image */
+  .KeptPin,
+  .KeptImagePinCount {
+    z-index: 1;
+  }
+
+  /* Full image in its real shape, as large as the column allows but never taller than the screen */
+  .KeptImageLarge {
+    width: min(100%, calc(80dvh * var(--kept-aspect, 1)));
+    overflow: visible;
+  }
+
+  .KeptLightboxSquare {
+    width: min(100%, calc(70dvh * var(--kept-aspect, 1)));
+  }
+}

@@ -5,6 +5,7 @@ import { Toggle } from '@base-ui/react/toggle';
 import { ToggleGroup } from '@base-ui/react/toggle-group';
 import {
   BackLink,
+  ImageFill,
   SearchIcon,
   Separator,
   formatDate,
@@ -154,6 +155,7 @@ export function KeptCollection({ collectionId }: { collectionId: string }) {
                 <li key={r.id}>
                   <a className="KeptFigureLink" href={`#/kept/library/${collection.id}/${r.id}`}>
                     <span className="KeptImage" aria-hidden>
+                      <ImageFill src={r.thumbUrl} />
                       {r.pins.length > 0 && <span className="KeptImagePinCount">{r.pins.length}</span>}
                     </span>
                     <span className="KeptStack KeptStack-0">
@@ -169,7 +171,9 @@ export function KeptCollection({ collectionId }: { collectionId: string }) {
               {visible.map((r) => (
                 <li key={r.id}>
                   <a className="KeptRefRow" href={`#/kept/library/${collection.id}/${r.id}`}>
-                    <span className="KeptImage KeptImageThumb" aria-hidden />
+                    <span className="KeptImage KeptImageThumb" aria-hidden>
+                      <ImageFill src={r.thumbUrl} />
+                    </span>
                     <span className="KeptText2 KeptFigureName">{r.title}</span>
                     <span className="KeptText1 KeptMuted KeptRefRowMeta KeptTruncate">
                       {sourceLabel(r.captureUrl)}
