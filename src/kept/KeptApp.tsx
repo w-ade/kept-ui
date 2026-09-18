@@ -136,11 +136,6 @@ export function KeptApp({ route }: { route: string }) {
         <Separator />
         <footer className="KeptContents">
           <span className="KeptText1 KeptCol-label">© Kept</span>
-          <nav className="KeptStack KeptCol-body" aria-label="Studio">
-            <a className="KeptLink KeptText1" href="https://onwend.com/" target="_blank" rel="noreferrer">
-              ONWEND
-            </a>
-          </nav>
         </footer>
       </div>
     </div>

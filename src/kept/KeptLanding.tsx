@@ -89,14 +89,6 @@ export function KeptLanding() {
                 <span className="KeptText2">{detail}</span>
               </li>
             ))}
-            <li className="KeptListItem">
-              <span className="KeptText2">Studio</span>
-              <span className="KeptText2">
-                <a className="KeptLink" href="https://onwend.com/" target="_blank" rel="noreferrer">
-                  ONWEND
-                </a>
-              </span>
-            </li>
           </ul>
         </div>
       </section>
