@@ -35,6 +35,7 @@ The UI spec (every screen, shell and rule) is in [docs/ui.html](docs/ui.html).
 | `src/kept/KeptLogin.tsx` | Username and password sign-in |
 | `src/kept/KeptLibrary.tsx` | Collections index and the New collection dialog |
 | `src/kept/KeptCollection.tsx` | A collection's references, as a grid or a list |
+| `src/kept/ReferenceBrowser.tsx` | Grid / List + search section, shared by a collection and All references |
 | `src/kept/KeptReference.tsx` | One reference: image with pins, notes, tags, annotations, file facts |
 | `src/kept/KeptShare.tsx` | Publish, copy, rotate and unpublish a board |
 | `src/kept/KeptBoard.tsx` | The public read-only board and its lightbox |

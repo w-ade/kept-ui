@@ -156,6 +156,12 @@ export async function listReferences(collectionId: string): Promise<Reference[]>
   return list;
 }
 
+// Every reference in every collection, collection order then reference order.
+export async function listAllReferences(): Promise<Reference[]> {
+  const lists = await Promise.all(collections.map((c) => listReferences(c.id)));
+  return lists.flat();
+}
+
 export async function updateReference(
   collectionId: string,
   referenceId: string,
