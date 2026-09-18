@@ -17,7 +17,10 @@ The dev server runs on port 5190 and is exposed on your network, so you can open
 - `http://localhost:5190/#/kept`: the Kept recreation. Sign in with the lab account **wade / 1234**
   (it only exists in the mock and protects nothing).
 - `http://localhost:5190/#/kept/m/tsp8f3k2qx`: a published board, no sign-in needed.
-- `http://localhost:5190/`: every Base UI docs demo, styled as on base-ui.com.
+- `http://localhost:5190/`: every Base UI docs demo, styled as on base-ui.com. **Dev only.**
+
+Production builds (`pnpm build`, and the Vercel deploy at https://kept-ui.vercel.app) contain Kept
+alone: `/` is the Kept landing, and the component lab and its demos are left out of the bundle.
 
 The UI spec (every screen, shell and rule) is in [docs/ui.html](docs/ui.html).
 
@@ -25,6 +28,8 @@ The UI spec (every screen, shell and rule) is in [docs/ui.html](docs/ui.html).
 
 | Path | What |
 | --- | --- |
+| `src/App.tsx` | Top-level router: Kept everywhere in production, the lab too in dev |
+| `src/LabApp.tsx` | The component lab shell (dev only) |
 | `src/kept/KeptApp.tsx` | Routing and the four shells: marketing, auth, app, board |
 | `src/kept/KeptLanding.tsx` | Landing with the invite-only Access section |
 | `src/kept/KeptLogin.tsx` | Username and password sign-in |
