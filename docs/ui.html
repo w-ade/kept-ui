@@ -187,6 +187,13 @@
     <li>Empty board: "This board is empty."</li>
   </ul>
 
+  <h3>System map (/map)</h3>
+  <ul>
+    <li>Public page in the Marketing shell. Aligned with the v0 plan, and readable on a phone without sideways scrolling.</li>
+    <li>Flow: the plan's tree (You → Library → References, Notes and tags, Annotations, Search, Share → Board → Anyone with the link), stepping in by depth.</li>
+    <li>Then ruled term | detail sections: 1 · Capabilities, 2 · Domain model (with the table list), 3 · Application, 4 · Data, 5 · Infrastructure, How it connects, and Later, not v0.</li>
+  </ul>
+
   <h2>Base UI parts</h2>
   <p>Every interactive control goes through Base UI; layout is plain CSS.</p>
   <ul>
@@ -212,7 +219,7 @@
   <ul>
     <li>Sign-in is mocked: one account, wade / 1234. Two-factor is skipped.</li>
     <li>Notes, tags, pins and collection descriptions are saved in the browser, so they survive reloads on that device only. New collections live in memory and reset on reload. Shares also persist in the browser, so a board link only opens on the device that published it (the built-in moode-matcha board opens anywhere).</li>
-    <li>Not built yet: upload, box annotations (pins only), two-factor, request an invite, Map, link previews for shared boards.</li>
+    <li>Not built yet: upload, box annotations (pins only), two-factor, request an invite, link previews for shared boards.</li>
   </ul>
 
   <p>Lab: github.com/w-ade/kept-ui — code: src/kept — plan: kept-v0.html — Base UI: https://base-ui.com/</p>

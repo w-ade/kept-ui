@@ -5,6 +5,7 @@ import { KeptCollection } from './KeptCollection.tsx';
 import { KeptLanding } from './KeptLanding.tsx';
 import { KeptLibrary } from './KeptLibrary.tsx';
 import { KeptLogin } from './KeptLogin.tsx';
+import { KeptMap } from './KeptMap.tsx';
 import { KeptReference } from './KeptReference.tsx';
 import { ArrowIcon, ArrowLink, Separator } from './parts.tsx';
 import { completeMfaForLab, getSession, signOut } from './session.ts';
@@ -30,11 +31,11 @@ const TITLES: Record<string, string> = {
   'login/mfa': 'Two-factor · KEPT',
   request: 'Request an invite · KEPT',
   library: 'Library · KEPT',
+  map: 'System map · KEPT',
 };
 
 const COMING_NEXT: Record<string, string> = {
   request: 'Request an invite',
-  map: 'Map',
 };
 
 function shellFor(route: string): Shell {
@@ -86,6 +87,7 @@ export function KeptApp({ route }: { route: string }) {
   else if (route === 'login') content = <KeptLogin />;
   else if (route === 'login/mfa') content = <KeptMfaPlaceholder />;
   else if (route === 'library') content = <KeptLibrary />;
+  else if (route === 'map') content = <KeptMap />;
   else if (route.startsWith('library/')) {
     const [, collectionId, referenceId] = route.split('/');
     content = referenceId ? (

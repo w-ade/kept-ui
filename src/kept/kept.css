@@ -1176,3 +1176,35 @@
     white-space: pre-line;
   }
 }
+
+/* ─── System map ─── */
+@layer components {
+  /* Term | detail rows where the detail needs more room than the term */
+  .KeptListWide .KeptListItem {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 1.5rem;
+
+    @media (min-width: 48rem) {
+      gap: 3rem;
+    }
+  }
+
+  /* Flow rows step in by depth, like the tree in the v0 plan */
+  .KeptFlowRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding-inline-start: calc(var(--kept-depth, 0) * 1rem);
+
+    @media (min-width: 48rem) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 3rem;
+      align-items: baseline;
+      /* Only the step indents; descriptions stay in one column */
+      padding-inline-start: 0;
+
+      > :first-child {
+        padding-inline-start: calc(var(--kept-depth, 0) * 1.5rem);
+      }
+    }
+  }
+}
