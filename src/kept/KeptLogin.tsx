@@ -5,7 +5,8 @@ import { Form } from '@base-ui/react/form';
 import { ArrowIcon, Separator } from './parts.tsx';
 import { signInWithPassword } from './session.ts';
 
-// /login: username + password (invite-only; accounts are created by hand). Success lands on /login/mfa (AAL1 → TOTP → AAL2).
+// /login: username + password (invite-only; accounts are created by hand).
+// Two-factor comes later; for now success goes straight to the library.
 export function KeptLogin() {
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [pending, setPending] = React.useState(false);
@@ -51,7 +52,7 @@ export function KeptLogin() {
               setErrors({ [error.field]: error.message });
               return;
             }
-            window.location.hash = '#/kept/login/mfa';
+            window.location.hash = '#/kept/library';
           }}
         >
           <div className="KeptList">
@@ -113,7 +114,6 @@ export function KeptLogin() {
               {pending ? 'Signing in…' : 'Continue'}
               <ArrowIcon />
             </Button>
-            <span className="KeptText1 KeptMuted">Next: a code from your authenticator app.</span>
           </div>
         </Form>
       </section>

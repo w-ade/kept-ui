@@ -368,3 +368,223 @@
     align-self: stretch;
   }
 }
+
+/* ─── App shell: Library ─── */
+@layer components {
+  .KeptStack-0 {
+    gap: 0;
+  }
+
+  .KeptStack-6 {
+    gap: 1.5rem;
+  }
+
+  /* Text-sized Base UI buttons (Sign out, New collection) */
+  .KeptButtonText1 {
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  /* The figure grid spans wider than body copy, like "Made for the makers" */
+  .KeptCol-wide {
+    grid-column: 1 / 9;
+    /* Search and tiles fill the column */
+    align-items: stretch;
+
+    @media (min-width: 64rem) {
+      grid-column: 3 / 9;
+    }
+  }
+
+  .KeptSearch {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding-block: 12px;
+    border-top: 1px solid var(--gray-t2);
+    border-bottom: 1px solid var(--gray-t2);
+
+    &:has(:focus-visible) {
+      box-shadow: inset 0 -1px 0 var(--gray-t2);
+    }
+
+    .KeptInput::-webkit-search-cancel-button {
+      appearance: none;
+    }
+  }
+
+  .KeptSearchIcon {
+    flex-shrink: 0;
+    color: var(--gray-t1);
+  }
+
+  /* List.css + Figure.css: bui-gtc-2 bp2:bui-gtc-4 bp3:bui-gtc-6, gaps 2.5rem / 3rem */
+  .KeptFigureGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (min-width: 48rem) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 3rem;
+    }
+
+    @media (min-width: 64rem) {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+  }
+
+  .KeptFigureLink {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: 0;
+
+    &:focus-visible .KeptMosaic {
+      outline: 2px solid var(--gray-t2);
+      outline-offset: 2px;
+    }
+
+    @media (hover: hover) {
+      &:hover .KeptFigureName {
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 4px;
+      }
+    }
+
+    &:active .KeptMosaicCell:not([data-empty]) {
+      background-color: var(--gray-c2);
+    }
+  }
+
+  /* Placeholder images: super light gray squares */
+  .KeptMosaic {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3px;
+    aspect-ratio: 1 / 1;
+    user-select: none;
+  }
+
+  .KeptMosaicCell {
+    background-color: var(--gray-c1);
+
+    &[data-empty] {
+      background-color: transparent;
+      box-shadow: inset 0 0 0 1px var(--gray-c1);
+    }
+  }
+
+  /* A just-created collection fades in once */
+  .KeptFigureItem[data-new] {
+    animation: kept-fade-in 300ms ease-out;
+  }
+
+  @keyframes kept-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .KeptFigureItem[data-new] {
+      animation: none;
+    }
+  }
+
+  /* ─── Dialog ─── */
+  .KeptDialogBackdrop {
+    position: fixed;
+    inset: 0;
+    min-height: 100dvh;
+    background-color: rgb(0 0 0 / 8%);
+    transition: opacity 150ms ease-out;
+
+    @supports (-webkit-touch-callout: none) {
+      position: absolute;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background-color: rgb(0 0 0 / 50%);
+    }
+
+    &[data-starting-style],
+    &[data-ending-style] {
+      opacity: 0;
+    }
+  }
+
+  .KeptDialogViewport {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 1.5rem;
+
+    @media (min-width: 48rem) {
+      align-items: center;
+    }
+  }
+
+  .KeptDialogPopup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 28rem;
+    padding: 1.5rem;
+    background-color: var(--gray-s1);
+    color: var(--gray-t2);
+    border: 1px solid var(--gray-t2);
+    outline: 0;
+    transition:
+      opacity 150ms ease-out,
+      transform 150ms ease-out;
+
+    &[data-starting-style],
+    &[data-ending-style] {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: opacity 150ms ease-out;
+
+      &[data-starting-style],
+      &[data-ending-style] {
+        transform: none;
+      }
+    }
+
+    .KeptForm {
+      margin-top: 1rem;
+      gap: 1.5rem;
+    }
+  }
+
+  /* Label above input even on desktop (narrow dialog) */
+  .KeptFieldStacked {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+
+    @media (min-width: 48rem) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.25rem;
+    }
+  }
+
+  .KeptDialogActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

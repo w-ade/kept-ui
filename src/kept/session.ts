@@ -11,21 +11,28 @@ export interface KeptSession {
 
 const KEY = 'kept.lab.session';
 
+// The one invited account in the lab (local only, not a real credential).
+const LAB_ACCOUNTS: Record<string, string> = { wade: '1234' };
+
+// In-memory copy so sign-in still works when storage is blocked (e.g. some private modes).
+let memorySession: KeptSession | null = null;
+
 export function getSession(): KeptSession | null {
   try {
     const raw = sessionStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as KeptSession) : null;
+    return raw ? (JSON.parse(raw) as KeptSession) : memorySession;
   } catch {
-    return null;
+    return memorySession;
   }
 }
 
 function setSession(session: KeptSession | null) {
+  memorySession = session;
   try {
     if (session) sessionStorage.setItem(KEY, JSON.stringify(session));
     else sessionStorage.removeItem(KEY);
   } catch {
-    // Storage blocked (private mode); the session just won't survive a refresh.
+    // Storage blocked; the in-memory copy lasts until the page reloads.
   }
 }
 
@@ -34,12 +41,18 @@ export async function signInWithPassword(
   password: string,
 ): Promise<{ error?: { field: 'username' | 'password'; message: string } }> {
   await new Promise((resolve) => setTimeout(resolve, 700));
-  // Lab rule so the error state can be exercised: the password "incorrect" is rejected.
-  if (password === 'incorrect') {
+  if (LAB_ACCOUNTS[username.toLowerCase()] !== password) {
     return { error: { field: 'password', message: 'Username or password is incorrect.' } };
   }
-  setSession({ username, aal: 'aal1' });
+  // Two-factor isn't built yet, so the lab account goes straight to AAL2.
+  setSession({ username: username.toLowerCase(), aal: 'aal2' });
   return {};
+}
+
+// Stand-in for the TOTP challenge until /login/mfa is built: promotes the session to AAL2.
+export function completeMfaForLab() {
+  const session = getSession();
+  if (session) setSession({ ...session, aal: 'aal2' });
 }
 
 export function signOut() {

@@ -1,37 +1,54 @@
 import * as React from 'react';
+import { Button } from '@base-ui/react/button';
 import { KeptLanding } from './KeptLanding.tsx';
+import { KeptLibrary } from './KeptLibrary.tsx';
 import { KeptLogin } from './KeptLogin.tsx';
-import { ArrowLink, Separator } from './parts.tsx';
-import { getSession } from './session.ts';
+import { ArrowIcon, ArrowLink, Separator } from './parts.tsx';
+import { completeMfaForLab, getSession, signOut } from './session.ts';
 import './kept.css';
 
 // Kept v0 recreation, lab-only. Routes live under #/kept so nothing touches the real Kept app.
 // Shells are modeled on the base-ui.com homepage ((website)/layout.tsx + page.tsx):
 // an 8-column grid where sections are `display: contents` and labels sit in the left gutter.
 
-const NAV = [
+type Shell = 'marketing' | 'auth' | 'app';
+
+const MARKETING_NAV = [
   { href: '#/kept', label: 'Landing', route: '' },
   { href: '#/kept/library', label: 'Library', route: 'library' },
   { href: '#/kept/map', label: 'Map', route: 'map' },
 ];
+const AUTH_NAV = MARKETING_NAV.slice(0, 1);
+const APP_NAV = MARKETING_NAV.slice(1);
 
 const TITLES: Record<string, string> = {
   '': 'KEPT — A library you can actually operate.',
   login: 'Sign in · KEPT',
   'login/mfa': 'Two-factor · KEPT',
   request: 'Request an invite · KEPT',
+  library: 'Library · KEPT',
 };
 
 const COMING_NEXT: Record<string, string> = {
-  'login/mfa': 'Two-factor',
   request: 'Request an invite',
+  map: 'Map',
 };
+
+function shellFor(route: string): Shell {
+  if (route.startsWith('login') || route === 'request') return 'auth';
+  if (route === 'library' || route.startsWith('library/')) return 'app';
+  return 'marketing';
+}
 
 // Signed-in routes: send the visitor to whichever auth step they still owe.
 function useAuthGate(route: string) {
-  const needsAuth = route === 'library' || route.startsWith('library/');
   const session = getSession();
-  const redirect = !needsAuth || session?.aal === 'aal2' ? null : session ? '#/kept/login/mfa' : '#/kept/login';
+  const redirect =
+    shellFor(route) !== 'app' || session?.aal === 'aal2'
+      ? null
+      : session
+        ? '#/kept/login/mfa'
+        : '#/kept/login';
 
   React.useEffect(() => {
     if (redirect) window.location.replace(redirect);
@@ -53,14 +70,18 @@ export function KeptApp({ route }: { route: string }) {
 
   if (redirecting) return null;
 
-  // The Auth shell only links home; the Marketing shell carries the site nav.
-  const isAuth = route.startsWith('login') || route === 'request';
-  const nav = isAuth ? NAV.slice(0, 1) : NAV;
+  const shell = shellFor(route);
+  const nav = shell === 'app' ? APP_NAV : shell === 'auth' ? AUTH_NAV : MARKETING_NAV;
+  const session = getSession();
 
   let content: React.ReactNode;
   if (route === '') content = <KeptLanding />;
   else if (route === 'login') content = <KeptLogin />;
-  else content = <KeptComingNext label={COMING_NEXT[route] ?? NAV.find((n) => n.route === route)?.label} />;
+  else if (route === 'login/mfa') content = <KeptMfaPlaceholder />;
+  else if (route === 'library') content = <KeptLibrary />;
+  else if (route.startsWith('library/'))
+    content = <KeptComingNext label="Collection" back="#/kept/library" backLabel="Back to library" />;
+  else content = <KeptComingNext label={COMING_NEXT[route]} />;
 
   return (
     <div className="KeptBody">
@@ -80,8 +101,21 @@ export function KeptApp({ route }: { route: string }) {
                 {item.label}
               </a>
             ))}
+            {shell === 'app' && (
+              <Button
+                className="KeptLink KeptText1 KeptButtonReset KeptButtonText1"
+                onClick={() => {
+                  signOut();
+                  window.location.hash = '#/kept';
+                }}
+              >
+                Sign out
+              </Button>
+            )}
           </nav>
-          <span className="KeptText1 KeptMuted KeptCol-status">Early development</span>
+          <span className="KeptText1 KeptMuted KeptCol-status">
+            {shell === 'app' && session ? session.username : 'Early development'}
+          </span>
         </header>
 
         <main className="KeptContents">{content}</main>
@@ -100,13 +134,45 @@ export function KeptApp({ route }: { route: string }) {
   );
 }
 
-function KeptComingNext({ label }: { label?: string }) {
+// Two-factor isn't built yet; this stand-in lets the lab reach the library.
+function KeptMfaPlaceholder() {
+  return (
+    <section className="KeptContents">
+      <h1 className="KeptDisplay KeptCol-hero">Two-factor</h1>
+      <p className="KeptText2 KeptMuted KeptCol-full">
+        Not built in the lab yet. Continue without a code for now.
+      </p>
+      <div className="KeptCol-full">
+        <Button
+          className="KeptLink KeptLinkArrow KeptText2 KeptButtonReset"
+          onClick={() => {
+            completeMfaForLab();
+            window.location.hash = '#/kept/library';
+          }}
+        >
+          Continue to library
+          <ArrowIcon />
+        </Button>
+      </div>
+    </section>
+  );
+}
+
+function KeptComingNext({
+  label,
+  back = '#/kept',
+  backLabel = 'Back to landing',
+}: {
+  label?: string;
+  back?: string;
+  backLabel?: string;
+}) {
   return (
     <section className="KeptContents">
       <h1 className="KeptDisplay KeptCol-hero">{label ?? 'Not found'}</h1>
       <p className="KeptText2 KeptMuted KeptCol-full">Not built in the lab yet.</p>
       <div className="KeptCol-full">
-        <ArrowLink href="#/kept">Back to landing</ArrowLink>
+        <ArrowLink href={back}>{backLabel}</ArrowLink>
       </div>
     </section>
   );
