@@ -38,3 +38,51 @@ export function ArrowLink({ href, children }: { href: string; children: React.Re
     </a>
   );
 }
+
+// docs Link `withArrow`, pointing back
+export function BackLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a className="KeptLink KeptLinkArrow KeptText1" href={href} data-direction="prev">
+      <span className="KeptFlip">
+        <ArrowIcon />
+      </span>
+      {children}
+    </a>
+  );
+}
+
+export function SearchIcon() {
+  return (
+    <svg
+      className="KeptSearchIcon"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="square"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="m11 11 3.5 3.5" />
+      <circle cx="7" cy="7" r="5.5" />
+    </svg>
+  );
+}
+
+export function plural(n: number, word: string) {
+  return `${n} ${word}${n === 1 ? '' : 's'}`;
+}
+
+const dateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+export function formatDate(iso: string) {
+  return dateFormat.format(new Date(`${iso}T12:00:00`));
+}
+
+// Pages with data-driven titles set their own; KeptApp covers the static ones.
+export function useDocumentTitle(title: string | undefined) {
+  React.useEffect(() => {
+    if (title) document.title = title;
+  }, [title]);
+}

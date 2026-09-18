@@ -4,7 +4,7 @@ import { Dialog } from '@base-ui/react/dialog';
 import { Field } from '@base-ui/react/field';
 import { Form } from '@base-ui/react/form';
 import { Input } from '@base-ui/react/input';
-import { ArrowIcon, Separator } from './parts.tsx';
+import { ArrowIcon, SearchIcon, Separator, plural } from './parts.tsx';
 import { createCollection, listCollections, type Collection } from './repository.ts';
 
 // /library: collections index, the app home. Tiles follow the base-ui.com "Made for the makers" grid;
@@ -173,29 +173,6 @@ function Mosaic({ count }: { count: number }) {
         <span key={i} className="KeptMosaicCell" data-empty={i >= count || undefined} />
       ))}
     </span>
-  );
-}
-
-function plural(n: number, word: string) {
-  return `${n} ${word}${n === 1 ? '' : 's'}`;
-}
-
-function SearchIcon() {
-  return (
-    <svg
-      className="KeptSearchIcon"
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="square"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <path d="m11 11 3.5 3.5" />
-      <circle cx="7" cy="7" r="5.5" />
-    </svg>
   );
 }
 

@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Button } from '@base-ui/react/button';
+import { KeptCollection } from './KeptCollection.tsx';
 import { KeptLanding } from './KeptLanding.tsx';
 import { KeptLibrary } from './KeptLibrary.tsx';
 import { KeptLogin } from './KeptLogin.tsx';
+import { KeptReference } from './KeptReference.tsx';
 import { ArrowIcon, ArrowLink, Separator } from './parts.tsx';
 import { completeMfaForLab, getSession, signOut } from './session.ts';
 import './kept.css';
@@ -62,7 +64,8 @@ export function KeptApp({ route }: { route: string }) {
 
   React.useEffect(() => {
     const previous = document.title;
-    document.title = TITLES[route] ?? 'KEPT';
+    // Collection and reference pages title themselves once their data loads.
+    if (!route.startsWith('library/')) document.title = TITLES[route] ?? 'KEPT';
     return () => {
       document.title = previous;
     };
@@ -79,8 +82,14 @@ export function KeptApp({ route }: { route: string }) {
   else if (route === 'login') content = <KeptLogin />;
   else if (route === 'login/mfa') content = <KeptMfaPlaceholder />;
   else if (route === 'library') content = <KeptLibrary />;
-  else if (route.startsWith('library/'))
-    content = <KeptComingNext label="Collection" back="#/kept/library" backLabel="Back to library" />;
+  else if (route.startsWith('library/')) {
+    const [, collectionId, referenceId] = route.split('/');
+    content = referenceId ? (
+      <KeptReference key={referenceId} collectionId={collectionId} referenceId={referenceId} />
+    ) : (
+      <KeptCollection key={collectionId} collectionId={collectionId} />
+    );
+  }
   else content = <KeptComingNext label={COMING_NEXT[route]} />;
 
   return (
