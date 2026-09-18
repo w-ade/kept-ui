@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { Button } from '@base-ui/react/button';
+import { AccountMenu as KeptAccountMenu } from './KeptAccountMenu.tsx';
+import { KeptReferral, KeptSettings } from './KeptAccountPages.tsx';
 import { KeptBoard } from './KeptBoard.tsx';
 import { KeptCollection } from './KeptCollection.tsx';
 import { KeptLanding } from './KeptLanding.tsx';
@@ -9,8 +11,9 @@ import { KeptIos } from './KeptIos.tsx';
 import { KeptMap } from './KeptMap.tsx';
 import { KeptReference } from './KeptReference.tsx';
 import { KeptRequest } from './KeptRequest.tsx';
+import { KeptTodo } from './KeptTodo.tsx';
 import { ArrowIcon, ArrowLink, Separator } from './parts.tsx';
-import { completeMfaForLab, getSession, signOut } from './session.ts';
+import { completeMfaForLab, getSession } from './session.ts';
 import './kept.css';
 
 // Kept v0 recreation, lab-only. Routes live under #/kept so nothing touches the real Kept app.
@@ -35,6 +38,9 @@ const TITLES: Record<string, string> = {
   library: 'Library · KEPT',
   map: 'System map · KEPT',
   ios: 'Kept on iOS · KEPT',
+  todo: 'To do · KEPT',
+  settings: 'Settings · KEPT',
+  referral: 'Referral · KEPT',
 };
 
 const COMING_NEXT: Record<string, string> = {};
@@ -43,6 +49,8 @@ function shellFor(route: string): Shell {
   if (route.startsWith('m/')) return 'board';
   if (route.startsWith('login') || route === 'request') return 'auth';
   if (route === 'library' || route.startsWith('library/')) return 'app';
+  // Account pages, from the menu under your name
+  if (route === 'todo' || route === 'settings' || route === 'referral') return 'app';
   return 'marketing';
 }
 
@@ -91,6 +99,9 @@ export function KeptApp({ route }: { route: string }) {
   else if (route === 'library') content = <KeptLibrary />;
   else if (route === 'map') content = <KeptMap />;
   else if (route === 'ios') content = <KeptIos />;
+  else if (route === 'todo') content = <KeptTodo />;
+  else if (route === 'settings') content = <KeptSettings />;
+  else if (route === 'referral') content = <KeptReferral />;
   else if (route.startsWith('library/')) {
     const [, collectionId, referenceId] = route.split('/');
     content = referenceId ? (
@@ -119,20 +130,10 @@ export function KeptApp({ route }: { route: string }) {
                 {item.label}
               </a>
             ))}
-            {shell === 'app' && (
-              <Button
-                className="KeptLink KeptText1 KeptButtonReset KeptButtonText1"
-                onClick={() => {
-                  signOut();
-                  window.location.hash = '#/kept';
-                }}
-              >
-                Sign out
-              </Button>
-            )}
+            {shell === 'app' && session && <KeptAccountMenu username={session.username} />}
           </nav>
           <span className="KeptText1 KeptMuted KeptCol-status">
-            {shell === 'app' && session ? session.username : 'Early development'}
+            Early development
           </span>
         </header>
 

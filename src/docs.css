@@ -65,8 +65,9 @@
     }
   }
 
+  /* Dark tokens: follow the system unless a theme is chosen (data-theme on <html>) */
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme='light']) {
       --gray-s1: hsl(0deg 0% 7.5%);
       --gray-s2: hsl(0deg 0% 10%);
       --gray-c1: hsl(0deg 0% 13%);
@@ -84,7 +85,37 @@
       --color-popup: var(--gray-s1);
       --poppy-t1: hsl(10deg 96% 63%);
       --green-t1: hsl(156deg 68% 54%);
+      --kept-backdrop: rgb(0 0 0 / 50%);
     }
+  }
+
+  :root[data-theme='dark'] {
+    --gray-s1: hsl(0deg 0% 7.5%);
+    --gray-s2: hsl(0deg 0% 10%);
+    --gray-c1: hsl(0deg 0% 13%);
+    --gray-c2: hsl(0deg 0% 16%);
+    --gray-c3: hsl(0deg 0% 32%);
+    --gray-p1: hsl(0deg 0% 60%);
+    --gray-p2: hsl(0deg 0% 64%);
+    --gray-t1: hsl(0deg 0% 70%);
+    --gray-t2: hsl(0deg 0% 90%);
+
+    --color-content: black;
+    --color-background: black;
+    --color-border: var(--whiteA-5);
+    --color-selection: hsl(0deg 0% 18%);
+    --color-popup: var(--gray-s1);
+    --poppy-t1: hsl(10deg 96% 63%);
+    --green-t1: hsl(156deg 68% 54%);
+    --kept-backdrop: rgb(0 0 0 / 50%);
+  }
+
+  :root[data-theme='light'] {
+    color-scheme: light;
+  }
+
+  :root[data-theme='dark'] {
+    color-scheme: dark;
   }
 }
 

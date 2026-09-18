@@ -108,7 +108,7 @@
   <ul>
     <li>Marketing (landing): KEPT wordmark top left, a stacked nav of text links (Landing, Library, Map), "Early development" on the right from 64rem. Footer: "© Kept".</li>
     <li>Auth (sign in, two-factor, request an invite): the same header with only a Landing link.</li>
-    <li>App (library, collection, reference): nav is Library, Map, Sign out. The signed-in username sits on the right from 64rem. Gated: no session sends you to /login; a session without two-factor sends you to /login/mfa.</li>
+    <li>App (library, collection, reference, and the account pages): nav is Library, Map, and the username, which opens the account menu (a Base UI Menu): To do; Appearance (Light mode, Dark mode, Match system, the current one checked); Settings; Referral; Sign out. Gated: no session sends you to /login; a session without two-factor sends you to /login/mfa.</li>
     <li>Board (/m/:token): no header, no nav, no sign-in. Its own footer: "Made with KEPT, a library you can actually operate."</li>
   </ul>
 
@@ -206,6 +206,13 @@
   <ul>
     <li>Linked from the last section of the system map, "Mobile plans (upcoming)". Same layout as the map, with a "‹ System map" back link.</li>
     <li>Path, then: Approach (wrap the web app with Capacitor, don't rewrite), Stage 0 home screen app, Stage 1 Capacitor app, Stage 2 native features, Stage 3 backend and Universal Links, Stage 4 TestFlight and App Store, Changes to this code, Order of work.</li>
+  </ul>
+
+  <h3>Account pages (signed in)</h3>
+  <ul>
+    <li>To do (/todo): Next steps (the remaining v0 work, with "2 of 11 done"), Suggestions (ideas to elevate Kept), and Yours (add your own with Enter or Add, Remove to delete). Each item is a Base UI Checkbox; checked items get a line through. Remembered in the browser.</li>
+    <li>Settings (/settings) and Referral (/referral): "Coming soon", with ruled rows describing what they'll hold.</li>
+    <li>Light and dark mode: a chosen mode sets data-theme on the page and overrides the system; Match system removes it. The browser toolbar color follows. Remembered in the browser.</li>
   </ul>
 
   <h2>Base UI parts</h2>
