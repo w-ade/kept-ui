@@ -4,33 +4,7 @@
  */
 @layer all, theme, components;
 
-@font-face {
-  font-family: 'die grotesk a';
-  font-weight: normal;
-  src: url('/fonts/die-grotesk-a-regular.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'die grotesk a';
-  font-weight: 700;
-  src: url('/fonts/die-grotesk-a-bold.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'die grotesk b';
-  font-weight: normal;
-  src: url('/fonts/die-grotesk-b-regular.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'die grotesk b';
-  font-weight: 700;
-  src: url('/fonts/die-grotesk-b-bold.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Paper Mono';
-  font-weight: normal;
-  src: url('/fonts/paper-mono.woff2') format('woff2');
-  font-variation-settings: 'wght' 415;
-  size-adjust: calc(100% * 13.5 / 14);
-}
+/* Fonts: Geist Sans and Geist Mono (SIL OFL), loaded from npm in main.tsx */
 
 @layer theme {
   :root {
@@ -54,9 +28,10 @@
     --color-border: var(--blackA-2);
     --color-selection: hsl(0deg 0% 92%);
 
-    --font-sans: 'die grotesk a', system-ui, sans-serif;
-    --font-sans-b: 'die grotesk b', system-ui, sans-serif;
-    --font-mono: 'Paper Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --font-sans: 'Geist Variable', system-ui, sans-serif;
+    /* Display headings; the docs use a second cut here, Geist uses one family */
+    --font-sans-b: var(--font-sans);
+    --font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, monospace;
 
     --gray-p2: hsl(0deg 0% 51%);
     --color-popup: white;
@@ -138,9 +113,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-y: scroll;
-    font-feature-settings:
-      'ss02' 1,
-      'zero' 1;
   }
 
   ::selection {
@@ -150,12 +122,6 @@
   /* Base UI quick start: popups portal above page content without z-index fights */
   .root {
     isolation: isolate;
-  }
-
-  /* Demos and their portalled popups don't use Die Grotesk's OpenType features */
-  [data-demo],
-  [data-base-ui-portal] {
-    font-feature-settings: normal;
   }
 }
 
