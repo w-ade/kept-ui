@@ -19,6 +19,8 @@ The dev server runs on port 5190 and is exposed on your network, so you can open
 - `http://localhost:5190/#/kept/m/tsp8f3k2qx`: a published board, no sign-in needed.
 - `http://localhost:5190/`: every Base UI docs demo, styled as on base-ui.com.
 
+The UI spec (every screen, shell and rule) is in [docs/ui.html](docs/ui.html).
+
 ## Where things are
 
 | Path | What |
