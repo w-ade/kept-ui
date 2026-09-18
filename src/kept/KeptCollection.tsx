@@ -13,7 +13,13 @@ import {
   sourceLabel,
   useDocumentTitle,
 } from './parts.tsx';
-import { getCollection, listReferences, type Collection, type Reference } from './repository.ts';
+import {
+  getCollection,
+  listReferences,
+  updateCollection,
+  type Collection,
+  type Reference,
+} from './repository.ts';
 import { ShareDialog } from './KeptShare.tsx';
 
 type View = 'grid' | 'list';
@@ -98,6 +104,26 @@ export function KeptCollection({ collectionId }: { collectionId: string }) {
           </p>
           <ShareDialog collection={collection} />
         </div>
+      </section>
+
+      <Separator />
+      <section className="KeptContents" aria-labelledby="kept-description">
+        <h2 id="kept-description" className="KeptText2 KeptCol-label">
+          Description
+        </h2>
+        <Field.Root className="KeptCol-body KeptNotes">
+          <Field.Label className="bui-sr-only">Description</Field.Label>
+          <Field.Control
+            render={<textarea rows={3} />}
+            className="KeptText2 KeptInput KeptTextarea"
+            placeholder="What is this collection for?"
+            value={collection.description}
+            onValueChange={(description) => {
+              setCollection({ ...collection, description });
+              void updateCollection(collection.id, { description });
+            }}
+          />
+        </Field.Root>
       </section>
 
       <Separator />

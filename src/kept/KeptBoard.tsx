@@ -62,6 +62,9 @@ export function KeptBoard({ token }: { token: string }) {
               {formatDate(share.publishedAt)}
             </p>
           </div>
+          {collection.description.trim() && (
+            <p className="KeptText2 KeptCol-body KeptPreLine">{collection.description}</p>
+          )}
         </header>
 
         <main className="KeptContents">
@@ -181,7 +184,7 @@ function Lightbox({
                 <Dialog.Description className="KeptText1 KeptMuted">
                   {sourceLabel(reference.captureUrl)}
                 </Dialog.Description>
-                {reference.notes && <p className="KeptText1">{reference.notes}</p>}
+                {reference.notes && <p className="KeptText1 KeptPreLine">{reference.notes}</p>}
                 {reference.pins.length > 0 && (
                   <ol className="KeptList KeptLightboxPins">
                     {reference.pins.map((pin, i) => (

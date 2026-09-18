@@ -148,6 +148,7 @@
   <h3>Collection (/library/:collectionId)</h3>
   <ul>
     <li>"‹ Library" back link over the title. Then "160 references. Updated Sep 18, 2026." and the share line: "Not shared. Share as a board ›" or "Shared as a board. Manage ›".</li>
+    <li>Description: a ruled text box that grows with its text ("What is this collection for?"). It also shows under the title on the collection's board, line breaks kept.</li>
     <li>Label column: "References" and a Grid / List switch. The current option reads like the current page: gray, no underline. The choice is remembered.</li>
     <li>Search ("Search titles, tags, notes") also matches source site, file name and pin captions.</li>
     <li>Grid: square, title, source site ("fontsinuse.com" or "Uploaded", with an ellipsis if long). A small black badge counts pins.</li>
@@ -199,7 +200,7 @@
 
   <h2>Data the UI expects</h2>
   <ul>
-    <li>Collection: id, name, reference count, updated date.</li>
+    <li>Collection: id, name, description, reference count, updated date.</li>
     <li>Reference (meaning): title, notes, tags, pins (normalized x/y plus caption), added date, capture URL or null for uploaded.</li>
     <li>Asset (file facts): file name, type, width, height, bytes. v0 has one asset per reference; show a count later if there are more.</li>
     <li>Share: token, owner, published date. Publish, rotate and unpublish; the board is read by token only.</li>
@@ -209,7 +210,7 @@
   <h2>Lab only, not decisions</h2>
   <ul>
     <li>Sign-in is mocked: one account, wade / 1234. Two-factor is skipped.</li>
-    <li>Collections, notes, tags and pins live in memory and reset on reload. Shares persist in the browser, so a board link only opens on the device that published it.</li>
+    <li>Notes, tags, pins and collection descriptions are saved in the browser, so they survive reloads on that device only. New collections live in memory and reset on reload. Shares also persist in the browser, so a board link only opens on the device that published it (the built-in moode-matcha board opens anywhere).</li>
     <li>Not built yet: upload, box annotations (pins only), two-factor, request an invite, Map, link previews for shared boards.</li>
   </ul>
 

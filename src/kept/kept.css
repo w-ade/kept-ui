@@ -1169,3 +1169,10 @@
     width: min(100%, calc(70dvh * var(--kept-aspect, 1)));
   }
 }
+
+@layer components {
+  /* Written text keeps its line breaks */
+  .KeptPreLine {
+    white-space: pre-line;
+  }
+}

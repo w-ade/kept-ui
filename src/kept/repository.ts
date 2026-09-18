@@ -1,13 +1,15 @@
 import moodeMatcha from './data/moode-matcha.json';
 
 // Mock repository for the lab. Same UI-facing shape the real Supabase repository will expose
-// (see kept-v0.html: "keep the same UI-facing API"). In memory, so edits reset on reload.
+// (see kept-v0.html: "keep the same UI-facing API"). Edits to notes, tags, pins and collection
+// descriptions are saved in this browser's localStorage; new collections live in memory only.
 
 export interface Collection {
   id: string;
   name: string;
   referenceCount: number;
   updatedAt: string; // ISO date
+  description: string;
   // Thumbnails of the first few references, for the library mosaic
   covers?: string[];
 }
@@ -57,11 +59,44 @@ const IMPORTED: Record<string, { name: string; addedAt: string; images: Imported
   'moode-matcha': { name: 'moode-matcha', addedAt: '2026-09-18', images: moodeMatcha },
 };
 
+// ─── Saved edits ───
+// Stand-in for the database: what you type survives reloads on this device.
+
+type ReferenceEdit = Partial<Pick<Reference, 'notes' | 'tags' | 'pins'>>;
+
+interface SavedEdits {
+  references: Record<string, ReferenceEdit>;
+  collections: Record<string, { description?: string }>;
+}
+
+const EDITS_KEY = 'kept.lab.edits.v1';
+
+function readEdits(): SavedEdits {
+  try {
+    const raw = localStorage.getItem(EDITS_KEY);
+    if (raw) return JSON.parse(raw) as SavedEdits;
+  } catch {
+    // Unreadable or blocked storage: start clean.
+  }
+  return { references: {}, collections: {} };
+}
+
+const edits = readEdits();
+
+function writeEdits() {
+  try {
+    localStorage.setItem(EDITS_KEY, JSON.stringify(edits));
+  } catch {
+    // Storage blocked: edits last until reload.
+  }
+}
+
 let collections: Collection[] = Object.entries(IMPORTED).map(([id, c]) => ({
   id,
   name: c.name,
   referenceCount: c.images.length,
   updatedAt: c.addedAt,
+  description: edits.collections[id]?.description ?? '',
   covers: c.images.slice(0, 4).map((img) => `/collections/${id}/thumb/${img.file}`),
 }));
 
@@ -87,9 +122,23 @@ export async function createCollection(name: string): Promise<Collection> {
     name: name.trim(),
     referenceCount: 0,
     updatedAt: new Date().toISOString().slice(0, 10),
+    description: '',
   };
   collections = [collection, ...collections];
   return collection;
+}
+
+export async function updateCollection(
+  id: string,
+  patch: Pick<Collection, 'description'>,
+): Promise<Collection | undefined> {
+  const index = collections.findIndex((c) => c.id === id);
+  if (index === -1) return undefined;
+  const next = { ...collections[index], ...patch };
+  collections = collections.map((c) => (c.id === id ? next : c));
+  edits.collections[id] = { ...edits.collections[id], ...patch };
+  writeEdits();
+  return next;
 }
 
 // ─── References ───
@@ -117,6 +166,8 @@ export async function updateReference(
   if (index === -1) return undefined;
   const next = { ...list[index], ...patch };
   list[index] = next;
+  edits.references[referenceId] = { ...edits.references[referenceId], ...patch };
+  writeEdits();
   return next;
 }
 
@@ -142,7 +193,7 @@ function importedReferences(collection: Collection): Reference[] {
     bytes: img.bytes,
     imageUrl: `/collections/${collection.id}/full/${img.file}`,
     thumbUrl: `/collections/${collection.id}/thumb/${img.file}`,
-  }));
+  })).map((r) => ({ ...r, ...edits.references[r.id] }));
 }
 
 // ─── Boards (published collections) ───
