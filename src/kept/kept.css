@@ -1258,3 +1258,10 @@
     }
   }
 }
+
+@layer components {
+  /* A shorter notes box inside a form row */
+  .KeptTextareaShort {
+    min-height: 4.75rem;
+  }
+}

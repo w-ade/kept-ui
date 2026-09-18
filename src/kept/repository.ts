@@ -409,3 +409,47 @@ export async function getBoard(token: string): Promise<Board | undefined> {
   if (!collection) return undefined;
   return { collection, references: await listReferences(collectionId), share };
 }
+
+// ─── Invite requests ───
+// Kept is invite-only; requests wait for the owner to let people in by hand.
+// Saved in this browser for the lab; the real app stores them in Supabase.
+
+export interface InviteRequest {
+  name: string;
+  email: string;
+  note: string;
+  requestedAt: string; // ISO date
+}
+
+const REQUESTS_KEY = 'kept.lab.requests.v1';
+
+function readRequests(): InviteRequest[] {
+  try {
+    const raw = localStorage.getItem(REQUESTS_KEY);
+    if (raw) return JSON.parse(raw) as InviteRequest[];
+  } catch {
+    // Unreadable or blocked storage.
+  }
+  return [];
+}
+
+export async function requestInvite(
+  request: Omit<InviteRequest, 'requestedAt'>,
+): Promise<{ alreadyRequested: boolean }> {
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  const requests = readRequests();
+  const email = request.email.trim().toLowerCase();
+  if (requests.some((r) => r.email === email)) return { alreadyRequested: true };
+  requests.push({
+    name: request.name.trim(),
+    email,
+    note: request.note.trim(),
+    requestedAt: new Date().toISOString().slice(0, 10),
+  });
+  try {
+    localStorage.setItem(REQUESTS_KEY, JSON.stringify(requests));
+  } catch {
+    // Storage blocked: the request isn't kept.
+  }
+  return { alreadyRequested: false };
+}

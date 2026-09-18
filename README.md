@@ -41,6 +41,7 @@ The UI spec (every screen, shell and rule) is in [docs/ui.html](docs/ui.html).
 | `src/kept/KeptUpload.tsx` | Add images dialog (phone photo picker, drag and drop on desktop) |
 | `src/kept/uploads.ts` | Resizes uploads on the device and keeps them in IndexedDB |
 | `src/kept/KeptIos.tsx` | Plan for getting Kept onto iOS (linked from the map) |
+| `src/kept/KeptRequest.tsx` | Request an invite (lab: saved only in the requester's browser) |
 | `src/kept/KeptShare.tsx` | Publish, copy, rotate and unpublish a board |
 | `src/kept/KeptBoard.tsx` | The public read-only board and its lightbox |
 | `src/kept/repository.ts` | Mock data layer; the real one swaps in behind the same functions |

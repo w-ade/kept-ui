@@ -8,6 +8,7 @@ import { KeptLogin } from './KeptLogin.tsx';
 import { KeptIos } from './KeptIos.tsx';
 import { KeptMap } from './KeptMap.tsx';
 import { KeptReference } from './KeptReference.tsx';
+import { KeptRequest } from './KeptRequest.tsx';
 import { ArrowIcon, ArrowLink, Separator } from './parts.tsx';
 import { completeMfaForLab, getSession, signOut } from './session.ts';
 import './kept.css';
@@ -36,9 +37,7 @@ const TITLES: Record<string, string> = {
   ios: 'Kept on iOS · KEPT',
 };
 
-const COMING_NEXT: Record<string, string> = {
-  request: 'Request an invite',
-};
+const COMING_NEXT: Record<string, string> = {};
 
 function shellFor(route: string): Shell {
   if (route.startsWith('m/')) return 'board';
@@ -88,6 +87,7 @@ export function KeptApp({ route }: { route: string }) {
   if (route === '') content = <KeptLanding />;
   else if (route === 'login') content = <KeptLogin />;
   else if (route === 'login/mfa') content = <KeptMfaPlaceholder />;
+  else if (route === 'request') content = <KeptRequest />;
   else if (route === 'library') content = <KeptLibrary />;
   else if (route === 'map') content = <KeptMap />;
   else if (route === 'ios') content = <KeptIos />;

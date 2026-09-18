@@ -132,8 +132,15 @@
     <li>Success goes to /login/mfa in the real app. The lab skips straight to /library.</li>
   </ul>
 
-  <h3>Two-factor (/login/mfa) and Request an invite (/request)</h3>
-  <p>Placeholders in the lab. Two-factor has its own route, so a refresh mid-challenge keeps you on it.</p>
+  <h3>Two-factor (/login/mfa)</h3>
+  <p>A placeholder in the lab. It has its own route, so a refresh mid-challenge keeps you on it.</p>
+
+  <h3>Request an invite (/request)</h3>
+  <ul>
+    <li>Auth shell. "Kept is invite-only while it’s in early development. Every account is let in by hand, so tell us a little about what you’d keep."</li>
+    <li>Ruled field rows: Name (required), Email (required), What would you keep? (optional, up to 500 characters). Errors: "Enter your name." / "Enter your email." / "That doesn’t look like an email."</li>
+    <li>Send request › reads "Sending…" while sending. Then the form is replaced by "You’re on the list." and where they'll hear back, or "You’re already on the list." for a repeat email. Links back to Kept and to Sign in.</li>
+  </ul>
 
   <h3>Library (/library)</h3>
   <ul>
@@ -227,7 +234,8 @@
     <li>Sign-in is mocked: one account, wade / 1234. Two-factor is skipped.</li>
     <li>Notes, tags, pins and collection descriptions are saved in the browser, so they survive reloads on that device only. New collections are saved too. Shares also persist in the browser, so a board link only opens on the device that published it (the built-in moode-matcha board opens anywhere).</li>
     <li>Uploads are saved in the browser (IndexedDB) and new collections in localStorage, so they stay on the device they were made on.</li>
-    <li>Not built yet: box annotations (pins only), two-factor, request an invite, link previews for shared boards.</li>
+    <li>Invite requests are saved only in the requester's own browser, so they don't reach the owner yet. Wire them to Supabase (or a form service) before sharing the link.</li>
+    <li>Not built yet: box annotations (pins only), two-factor, link previews for shared boards.</li>
   </ul>
 
   <p>Lab: github.com/w-ade/kept-ui — code: src/kept — plan: kept-v0.html — Base UI: https://base-ui.com/</p>
