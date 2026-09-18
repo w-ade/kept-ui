@@ -1,12 +1,18 @@
 import type { CSSProperties } from 'react';
-import { Separator } from './parts.tsx';
+import { ArrowLink, Separator } from './parts.tsx';
 
 // /map: the system map, aligned with the Kept v0 plan (kept-v0.html).
 // Layers are labeled sections of ruled rows so it reads on a phone without sideways scrolling.
 
-type Row = [term: string, detail: string];
+export type Row = [term: string, detail: string];
 
-const FLOW: { depth: number; term: string; detail: string }[] = [
+export interface FlowStep {
+  depth: number;
+  term: string;
+  detail: string;
+}
+
+const FLOW: FlowStep[] = [
   { depth: 0, term: 'You', detail: 'Username, password and two-factor' },
   { depth: 1, term: 'Library', detail: 'Operate your collections' },
   { depth: 2, term: 'References', detail: 'Images, each with its file' },
@@ -127,14 +133,41 @@ export function KeptMap() {
         </p>
       </section>
 
+      <FlowSection id="kept-map-flow" heading="Flow" steps={FLOW} />
+
+      {LAYERS.map((layer) => (
+        <MapLayer key={layer.id} {...layer} />
+      ))}
+
       <Separator />
-      <section className="KeptContents" aria-labelledby="kept-map-flow">
-        <h2 id="kept-map-flow" className="KeptText2 KeptCol-label">
-          Flow
+      <section className="KeptContents" aria-labelledby="kept-map-mobile">
+        <h2 id="kept-map-mobile" className="KeptText2 KeptCol-label">
+          Mobile plans (upcoming)
+        </h2>
+        <div className="KeptCol-body KeptStack KeptStack-4">
+          <p className="KeptText2">
+            Getting Kept onto the iPhone as a real app, using this same code: from a home-screen
+            web app to TestFlight and the App Store.
+          </p>
+          <ArrowLink href="#/kept/ios">Kept on iOS</ArrowLink>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// The plan's tree as ruled rows that step in by depth.
+export function FlowSection({ id, heading, steps }: { id: string; heading: string; steps: FlowStep[] }) {
+  return (
+    <>
+      <Separator />
+      <section className="KeptContents" aria-labelledby={id}>
+        <h2 id={id} className="KeptText2 KeptCol-label">
+          {heading}
         </h2>
         <div className="KeptCol-body">
           <ol className="KeptList KeptFlow">
-            {FLOW.map((step) => (
+            {steps.map((step) => (
               <li
                 key={step.term}
                 className="KeptListItem KeptFlowRow"
@@ -154,15 +187,11 @@ export function KeptMap() {
           </ol>
         </div>
       </section>
-
-      {LAYERS.map((layer) => (
-        <MapLayer key={layer.id} {...layer} />
-      ))}
     </>
   );
 }
 
-function MapLayer({
+export function MapLayer({
   id,
   heading,
   intro,

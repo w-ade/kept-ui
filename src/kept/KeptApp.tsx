@@ -5,6 +5,7 @@ import { KeptCollection } from './KeptCollection.tsx';
 import { KeptLanding } from './KeptLanding.tsx';
 import { KeptLibrary } from './KeptLibrary.tsx';
 import { KeptLogin } from './KeptLogin.tsx';
+import { KeptIos } from './KeptIos.tsx';
 import { KeptMap } from './KeptMap.tsx';
 import { KeptReference } from './KeptReference.tsx';
 import { ArrowIcon, ArrowLink, Separator } from './parts.tsx';
@@ -32,6 +33,7 @@ const TITLES: Record<string, string> = {
   request: 'Request an invite · KEPT',
   library: 'Library · KEPT',
   map: 'System map · KEPT',
+  ios: 'Kept on iOS · KEPT',
 };
 
 const COMING_NEXT: Record<string, string> = {
@@ -88,6 +90,7 @@ export function KeptApp({ route }: { route: string }) {
   else if (route === 'login/mfa') content = <KeptMfaPlaceholder />;
   else if (route === 'library') content = <KeptLibrary />;
   else if (route === 'map') content = <KeptMap />;
+  else if (route === 'ios') content = <KeptIos />;
   else if (route.startsWith('library/')) {
     const [, collectionId, referenceId] = route.split('/');
     content = referenceId ? (
