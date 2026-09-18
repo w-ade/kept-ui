@@ -150,6 +150,7 @@
   <ul>
     <li>"‹ Library" back link over the title. Then "160 references. Updated Sep 18, 2026." and the share line: "Not shared. Share as a board ›" or "Shared as a board. Manage ›".</li>
     <li>Description: a ruled text box that grows with its text ("What is this collection for?"). It also shows under the title on the collection's board, line breaks kept.</li>
+    <li>Add images +: opens the upload dialog (a Base UI Dialog). "Choose images" opens the phone's photo picker (library, camera or files), several at a time; on desktop, images can also be dropped on the dialog. Each file gets a row: Waiting, Adding…, Added, or "Couldn’t read this file" in poppy, with a running "Adding 3 of 12…". Done is disabled until it finishes. Images are resized on the device (1600px full, 480px thumbnail, metadata removed); the file name becomes the title and the source reads Uploaded. New images go first.</li>
     <li>Label column: "References" and a Grid / List switch. The current option reads like the current page: gray, no underline. The choice is remembered.</li>
     <li>Search ("Search titles, tags, notes") also matches source site, file name and pin captions.</li>
     <li>Grid: square, title, source site ("fontsinuse.com" or "Uploaded", with an ellipsis if long). A small black badge counts pins.</li>
@@ -218,8 +219,9 @@
   <h2>Lab only, not decisions</h2>
   <ul>
     <li>Sign-in is mocked: one account, wade / 1234. Two-factor is skipped.</li>
-    <li>Notes, tags, pins and collection descriptions are saved in the browser, so they survive reloads on that device only. New collections live in memory and reset on reload. Shares also persist in the browser, so a board link only opens on the device that published it (the built-in moode-matcha board opens anywhere).</li>
-    <li>Not built yet: upload, box annotations (pins only), two-factor, request an invite, link previews for shared boards.</li>
+    <li>Notes, tags, pins and collection descriptions are saved in the browser, so they survive reloads on that device only. New collections are saved too. Shares also persist in the browser, so a board link only opens on the device that published it (the built-in moode-matcha board opens anywhere).</li>
+    <li>Uploads are saved in the browser (IndexedDB) and new collections in localStorage, so they stay on the device they were made on.</li>
+    <li>Not built yet: box annotations (pins only), two-factor, request an invite, link previews for shared boards.</li>
   </ul>
 
   <p>Lab: github.com/w-ade/kept-ui — code: src/kept — plan: kept-v0.html — Base UI: https://base-ui.com/</p>

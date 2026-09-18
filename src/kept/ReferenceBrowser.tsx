@@ -28,6 +28,7 @@ export function ReferenceBrowser({
   references,
   meta = sourceMeta,
   emptyText = 'Nothing kept here yet.',
+  actions,
 }: {
   id: string;
   heading: string;
@@ -35,6 +36,8 @@ export function ReferenceBrowser({
   // Second line under each item: the source site by default
   meta?: (r: Reference) => string;
   emptyText?: string;
+  // Extra controls under the heading, e.g. Add images
+  actions?: React.ReactNode;
 }) {
   const [query, setQuery] = React.useState('');
   const [view, setView] = React.useState<View>(readView);
@@ -82,6 +85,7 @@ export function ReferenceBrowser({
             List
           </Toggle>
         </ToggleGroup>
+        {actions}
       </div>
 
       <div className="KeptCol-wide KeptStack KeptStack-6">

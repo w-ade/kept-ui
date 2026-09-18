@@ -1,8 +1,10 @@
 import moodeMatcha from './data/moode-matcha.json';
+import { loadUploads, prepareUpload, saveUpload, type StoredUpload } from './uploads.ts';
 
 // Mock repository for the lab. Same UI-facing shape the real Supabase repository will expose
 // (see kept-v0.html: "keep the same UI-facing API"). Edits to notes, tags, pins and collection
-// descriptions are saved in this browser's localStorage; new collections live in memory only.
+// descriptions are saved in this browser's localStorage; new collections too. Uploaded images
+// are saved in IndexedDB (uploads.ts). All of it stays on the device it was made on.
 
 export interface Collection {
   id: string;
@@ -91,20 +93,95 @@ function writeEdits() {
   }
 }
 
-let collections: Collection[] = Object.entries(IMPORTED).map(([id, c]) => ({
-  id,
-  name: c.name,
-  referenceCount: c.images.length,
-  updatedAt: c.addedAt,
-  description: edits.collections[id]?.description ?? '',
-  covers: c.images.slice(0, 4).map((img) => `/collections/${id}/thumb/${img.file}`),
-}));
+// Collections made in the app (the imported ones come from IMPORTED).
+const CREATED_KEY = 'kept.lab.created.v1';
+
+type CreatedCollection = Pick<Collection, 'id' | 'name' | 'updatedAt'>;
+
+function readCreated(): CreatedCollection[] {
+  try {
+    const raw = localStorage.getItem(CREATED_KEY);
+    if (raw) return JSON.parse(raw) as CreatedCollection[];
+  } catch {
+    // Unreadable or blocked storage.
+  }
+  return [];
+}
+
+const created = readCreated();
+
+function writeCreated() {
+  try {
+    localStorage.setItem(CREATED_KEY, JSON.stringify(created));
+  } catch {
+    // Storage blocked: new collections last until reload.
+  }
+}
+
+// Uploaded references per collection, newest first.
+const uploaded = new Map<string, Reference[]>();
+
+// Reference count and mosaic covers come from uploads plus imported images.
+function withCounts(c: Collection): Collection {
+  const up = uploaded.get(c.id) ?? [];
+  const imported = IMPORTED[c.id]?.images ?? [];
+  const covers = [
+    ...up.map((r) => r.thumbUrl ?? ''),
+    ...imported.map((img) => `/collections/${c.id}/thumb/${img.file}`),
+  ].slice(0, 4);
+  return { ...c, referenceCount: up.length + imported.length, covers };
+}
+
+let collections: Collection[] = [
+  ...created.map((c) => ({ ...c, referenceCount: 0, description: '' })),
+  ...Object.entries(IMPORTED).map(([id, c]) => ({
+    id,
+    name: c.name,
+    referenceCount: c.images.length,
+    updatedAt: c.addedAt,
+    description: '',
+  })),
+].map((c) => withCounts({ ...c, description: edits.collections[c.id]?.description ?? '' }));
+
+function uploadToReference(u: StoredUpload): Reference {
+  return {
+    id: u.id,
+    collectionId: u.collectionId,
+    title: u.title,
+    notes: '',
+    tags: [],
+    pins: [],
+    addedAt: u.addedAt,
+    captureUrl: null,
+    fileName: u.fileName,
+    fileType: u.fileType,
+    width: u.width,
+    height: u.height,
+    bytes: u.bytes,
+    imageUrl: URL.createObjectURL(u.full),
+    thumbUrl: URL.createObjectURL(u.thumb),
+    ...edits.references[u.id],
+  };
+}
+
+// Everything waits for saved uploads to load once.
+const ready = loadUploads().then((list) => {
+  list.sort((a, b) => b.createdAt - a.createdAt);
+  for (const u of list) {
+    const refs = uploaded.get(u.collectionId) ?? [];
+    refs.push(uploadToReference(u));
+    uploaded.set(u.collectionId, refs);
+  }
+  collections = collections.map(withCounts);
+});
 
 export async function listCollections(): Promise<Collection[]> {
+  await ready;
   return collections;
 }
 
 export async function getCollection(id: string): Promise<Collection | undefined> {
+  await ready;
   return collections.find((c) => c.id === id);
 }
 
@@ -125,6 +202,8 @@ export async function createCollection(name: string): Promise<Collection> {
     description: '',
   };
   collections = [collection, ...collections];
+  created.unshift({ id: collection.id, name: collection.name, updatedAt: collection.updatedAt });
+  writeCreated();
   return collection;
 }
 
@@ -146,14 +225,53 @@ export async function updateCollection(
 const referenceCache = new Map<string, Reference[]>();
 
 export async function listReferences(collectionId: string): Promise<Reference[]> {
+  await ready;
   const collection = collections.find((c) => c.id === collectionId);
   if (!collection) return [];
   let list = referenceCache.get(collectionId);
   if (!list) {
-    list = importedReferences(collection);
+    list = [...(uploaded.get(collectionId) ?? []), ...importedReferences(collection)];
     referenceCache.set(collectionId, list);
   }
   return list;
+}
+
+export type UploadStatus = 'adding' | 'added' | 'failed';
+
+// Add image files to a collection, one at a time; newest end up first.
+export async function addUploads(
+  collectionId: string,
+  files: File[],
+  onProgress: (index: number, status: UploadStatus) => void,
+): Promise<Reference[]> {
+  const list = await listReferences(collectionId);
+  const added: Reference[] = [];
+  for (const [index, file] of files.entries()) {
+    onProgress(index, 'adding');
+    try {
+      const upload = await prepareUpload(file, collectionId, index);
+      await saveUpload(upload);
+      const reference = uploadToReference(upload);
+      uploaded.set(collectionId, [reference, ...(uploaded.get(collectionId) ?? [])]);
+      list.unshift(reference);
+      added.push(reference);
+      onProgress(index, 'added');
+    } catch {
+      onProgress(index, 'failed');
+    }
+  }
+  if (added.length > 0) {
+    const today = new Date().toISOString().slice(0, 10);
+    collections = collections.map((c) =>
+      c.id === collectionId ? withCounts({ ...c, updatedAt: today }) : c,
+    );
+    const mine = created.find((c) => c.id === collectionId);
+    if (mine) {
+      mine.updatedAt = today;
+      writeCreated();
+    }
+  }
+  return added;
 }
 
 // Every reference in every collection, collection order then reference order.
@@ -283,6 +401,7 @@ export interface Board {
 }
 
 export async function getBoard(token: string): Promise<Board | undefined> {
+  await ready;
   const entry = Object.entries(shares).find(([, s]) => s.token === token);
   if (!entry) return undefined;
   const [collectionId, share] = entry;

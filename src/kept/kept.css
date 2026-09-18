@@ -1208,3 +1208,53 @@
     }
   }
 }
+
+/* ─── Upload ─── */
+@layer components {
+  .KeptDropzone {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-top: 1rem;
+    padding: 2rem 1rem;
+    justify-content: center;
+    background-color: var(--gray-c1);
+    transition: background-color 150ms ease-out;
+  }
+
+  /* Dropping only makes sense with a pointer that can drag files */
+  .KeptDropHint {
+    @media (hover: none) {
+      display: none;
+    }
+  }
+
+  .KeptDialogPopup[data-dragging] .KeptDropzone {
+    background-color: var(--gray-c2);
+    outline: 1px solid var(--gray-t2);
+    outline-offset: -1px;
+  }
+
+  .KeptUploadList {
+    max-height: min(16rem, 40dvh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .KeptUploadRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem;
+    padding-block: 8px;
+  }
+
+  .KeptUploadStatus {
+    &[data-status='added'] {
+      color: var(--gray-t2);
+    }
+
+    &[data-status='failed'] {
+      color: var(--poppy-t1);
+    }
+  }
+}
