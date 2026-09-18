@@ -6,7 +6,7 @@ const ACTIONS = [
   ['Annotate', 'Add meaning.'],
   ['Organize', 'Put it into collections / relationships.'],
   ['Query', 'Search and filter it.'],
-  ['Retrieve', 'Actually fucking find it again.'],
+  ['Retrieve', 'Actually find it again.'],
   ['Connect', 'Relate one reference to another.'],
 ];
 
