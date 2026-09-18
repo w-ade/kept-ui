@@ -1,0 +1,781 @@
+[
+  {
+    "slug": "accordion",
+    "title": "Accordion",
+    "subtitle": "A set of collapsible panels with headings.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "multiple",
+        "heading": "Open multiple panels"
+      },
+      {
+        "id": "hidden-until-found",
+        "heading": "Hidden until found"
+      }
+    ]
+  },
+  {
+    "slug": "alert-dialog",
+    "title": "Alert Dialog",
+    "subtitle": "A dialog that requires a user response to proceed.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "open-from-menu",
+        "heading": "Open from a menu"
+      },
+      {
+        "id": "detached-triggers-simple",
+        "heading": "Detached triggers"
+      },
+      {
+        "id": "detached-triggers-controlled",
+        "heading": "Controlled mode with multiple triggers"
+      }
+    ]
+  },
+  {
+    "slug": "autocomplete",
+    "title": "Autocomplete",
+    "subtitle": "An input that suggests options as you type.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "async",
+        "heading": "Async search"
+      },
+      {
+        "id": "inline",
+        "heading": "Inline autocomplete"
+      },
+      {
+        "id": "grouped",
+        "heading": "Grouped"
+      },
+      {
+        "id": "fuzzy-matching",
+        "heading": "Fuzzy matching"
+      },
+      {
+        "id": "limit",
+        "heading": "Limit results"
+      },
+      {
+        "id": "auto-highlight",
+        "heading": "Auto highlight"
+      },
+      {
+        "id": "command-palette",
+        "heading": "Command palette"
+      },
+      {
+        "id": "grid",
+        "heading": "Grid layout"
+      },
+      {
+        "id": "virtualized",
+        "heading": "Virtualized"
+      }
+    ]
+  },
+  {
+    "slug": "avatar",
+    "title": "Avatar",
+    "subtitle": "An easily stylable avatar component.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "button",
+    "title": "Button",
+    "subtitle": "A button component that can be rendered as another tag or focusable when disabled.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "loading",
+        "heading": "Loading states"
+      }
+    ]
+  },
+  {
+    "slug": "checkbox",
+    "title": "Checkbox",
+    "subtitle": "An easily stylable checkbox component.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "checkbox-group",
+    "title": "Checkbox Group",
+    "subtitle": "Provides shared state to a series of checkboxes.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "parent",
+        "heading": "Parent checkbox"
+      },
+      {
+        "id": "nested",
+        "heading": "Nested parent checkbox"
+      }
+    ]
+  },
+  {
+    "slug": "collapsible",
+    "title": "Collapsible",
+    "subtitle": "A collapsible panel controlled by a button.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "combobox",
+    "title": "Combobox",
+    "subtitle": "An input combined with a list of predefined items to select.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "create-items",
+        "heading": "Value selection with IDs"
+      },
+      {
+        "id": "multiple",
+        "heading": "Multiple select"
+      },
+      {
+        "id": "input-inside-popup",
+        "heading": "Input inside popup"
+      },
+      {
+        "id": "grouped",
+        "heading": "Grouped"
+      },
+      {
+        "id": "async-single",
+        "heading": "Async search (single)"
+      },
+      {
+        "id": "async-multiple",
+        "heading": "Async search (multiple)"
+      },
+      {
+        "id": "creatable",
+        "heading": "Creatable"
+      },
+      {
+        "id": "virtualized",
+        "heading": "Virtualized"
+      }
+    ]
+  },
+  {
+    "slug": "context-menu",
+    "title": "Context Menu",
+    "subtitle": "A menu that appears at the pointer on right click or long press.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "with-menu",
+        "heading": "Using with Menu"
+      },
+      {
+        "id": "submenu",
+        "heading": "Nested menu"
+      }
+    ]
+  },
+  {
+    "slug": "dialog",
+    "title": "Dialog",
+    "subtitle": "A popup that opens on top of the entire page.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "open-from-menu",
+        "heading": "Open from a menu"
+      },
+      {
+        "id": "nested",
+        "heading": "Nested dialogs"
+      },
+      {
+        "id": "close-confirmation",
+        "heading": "Close confirmation"
+      },
+      {
+        "id": "focus-management",
+        "heading": "Custom focus management"
+      },
+      {
+        "id": "outside-scroll",
+        "heading": "Outside scroll dialog"
+      },
+      {
+        "id": "inside-scroll",
+        "heading": "Inside scroll dialog"
+      },
+      {
+        "id": "uncontained",
+        "heading": "Placing elements outside the popup"
+      },
+      {
+        "id": "detached-triggers-simple",
+        "heading": "Detached triggers"
+      },
+      {
+        "id": "detached-triggers-controlled",
+        "heading": "Controlled mode with multiple triggers"
+      }
+    ]
+  },
+  {
+    "slug": "drawer",
+    "title": "Drawer",
+    "subtitle": "A panel that slides in from the edge of the screen.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "position",
+        "heading": "Position"
+      },
+      {
+        "id": "nested",
+        "heading": "Nested drawers"
+      },
+      {
+        "id": "snap-points",
+        "heading": "Snap points"
+      },
+      {
+        "id": "virtual-keyboard-aware",
+        "heading": "Virtual keyboard aware"
+      },
+      {
+        "id": "indent-provider",
+        "heading": "Indent effect"
+      },
+      {
+        "id": "non-modal",
+        "heading": "Non-modal"
+      },
+      {
+        "id": "mobile-nav",
+        "heading": "Mobile navigation"
+      },
+      {
+        "id": "swipe-area",
+        "heading": "Swipe to open"
+      },
+      {
+        "id": "close-confirmation",
+        "heading": "Close confirmation"
+      },
+      {
+        "id": "uncontained",
+        "heading": "Action sheet with separate destructive action"
+      }
+    ]
+  },
+  {
+    "slug": "field",
+    "title": "Field",
+    "subtitle": "A component that provides labeling and validation for form controls.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "fieldset",
+    "title": "Fieldset",
+    "subtitle": "A native fieldset element with an easily stylable legend.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "form",
+    "title": "Form",
+    "subtitle": "A native form element with consolidated error handling.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "form-action",
+        "heading": "Submit with a Server Function"
+      },
+      {
+        "id": "zod",
+        "heading": "Using with Zod"
+      }
+    ]
+  },
+  {
+    "slug": "input",
+    "title": "Input",
+    "subtitle": "A native input element that automatically works with [Field](/react/components/field).",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "menu",
+    "title": "Menu",
+    "subtitle": "A list of actions in a dropdown, enhanced with keyboard navigation.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "open-on-hover",
+        "heading": "Open on hover"
+      },
+      {
+        "id": "checkbox-items",
+        "heading": "Checkbox items"
+      },
+      {
+        "id": "radio-items",
+        "heading": "Radio items"
+      },
+      {
+        "id": "group-labels",
+        "heading": "Group labels"
+      },
+      {
+        "id": "submenu",
+        "heading": "Nested menu"
+      },
+      {
+        "id": "detached-triggers-simple",
+        "heading": "Detached triggers"
+      },
+      {
+        "id": "detached-triggers-controlled",
+        "heading": "Controlled mode with multiple triggers"
+      },
+      {
+        "id": "arrow",
+        "heading": "Arrow"
+      },
+      {
+        "id": "detached-triggers-full",
+        "heading": "Animating the Menu"
+      }
+    ]
+  },
+  {
+    "slug": "menubar",
+    "title": "Menubar",
+    "subtitle": "A menu bar providing commands and options for your application.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "meter",
+    "title": "Meter",
+    "subtitle": "A graphical display of a numeric value within a range.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "navigation-menu",
+    "title": "Navigation Menu",
+    "subtitle": "A collection of links and menus for website navigation.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "nested",
+        "heading": "Nested submenus"
+      },
+      {
+        "id": "nested-inline",
+        "heading": "Nested inline submenus"
+      }
+    ]
+  },
+  {
+    "slug": "number-field",
+    "title": "Number Field",
+    "subtitle": "A numeric input element with increment and decrement buttons, and a scrub area.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "otp-field",
+    "title": "OTP Field",
+    "subtitle": "A one-time password input composed of individual character slots.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "alphanumeric",
+        "heading": "Alphanumeric verification codes"
+      },
+      {
+        "id": "grouped",
+        "heading": "Grouped layouts"
+      },
+      {
+        "id": "focused-placeholder",
+        "heading": "Placeholder hints"
+      },
+      {
+        "id": "custom-sanitize",
+        "heading": "Custom normalization"
+      },
+      {
+        "id": "password",
+        "heading": "Masked entry"
+      }
+    ]
+  },
+  {
+    "slug": "popover",
+    "title": "Popover",
+    "subtitle": "An accessible popup anchored to a button.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "open-on-hover",
+        "heading": "Opening on hover"
+      },
+      {
+        "id": "detached-triggers-simple",
+        "heading": "Detached triggers"
+      },
+      {
+        "id": "detached-triggers-controlled",
+        "heading": "Controlled mode with multiple triggers"
+      },
+      {
+        "id": "detached-triggers-full",
+        "heading": "Animating the Popover"
+      }
+    ]
+  },
+  {
+    "slug": "preview-card",
+    "title": "Preview Card",
+    "subtitle": "A link that shows a destination preview without interrupting keyboard or screen reader navigation.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "detached-triggers-simple",
+        "heading": "Detached triggers"
+      },
+      {
+        "id": "detached-triggers-controlled",
+        "heading": "Controlled mode with multiple triggers"
+      },
+      {
+        "id": "detached-triggers-full",
+        "heading": "Animating the Preview Card"
+      }
+    ]
+  },
+  {
+    "slug": "progress",
+    "title": "Progress",
+    "subtitle": "Displays the status of a task that takes a long time.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "radio-group",
+    "title": "Radio Group",
+    "subtitle": "Provides shared state to a series of radio buttons.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "scroll-area",
+    "title": "Scroll Area",
+    "subtitle": "A native scroll container with custom scrollbars.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "both",
+        "heading": "Both scrollbars"
+      },
+      {
+        "id": "scroll-fade",
+        "heading": "Gradient scroll fade"
+      }
+    ]
+  },
+  {
+    "slug": "select",
+    "title": "Select",
+    "subtitle": "A common form component for choosing a predefined value in a dropdown menu.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "multiple",
+        "heading": "Multiple selection"
+      },
+      {
+        "id": "object-values",
+        "heading": "Object values"
+      },
+      {
+        "id": "grouped",
+        "heading": "Grouped"
+      }
+    ]
+  },
+  {
+    "slug": "separator",
+    "title": "Separator",
+    "subtitle": "A separator element accessible to screen readers.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "slider",
+    "title": "Slider",
+    "subtitle": "An easily stylable range input.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "range-slider",
+        "heading": "Range slider"
+      },
+      {
+        "id": "steps",
+        "heading": "Steps"
+      },
+      {
+        "id": "marks",
+        "heading": "Marks"
+      },
+      {
+        "id": "edge-alignment",
+        "heading": "Thumb alignment"
+      },
+      {
+        "id": "vertical",
+        "heading": "Vertical"
+      }
+    ]
+  },
+  {
+    "slug": "switch",
+    "title": "Switch",
+    "subtitle": "A control that indicates whether a setting is on or off.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "tabs",
+    "title": "Tabs",
+    "subtitle": "A component for toggling between related panels on the same page.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "animated-panels",
+        "heading": "Animated panels"
+      }
+    ]
+  },
+  {
+    "slug": "toast",
+    "title": "Toast",
+    "subtitle": "Generates toast notifications.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "anchored",
+        "heading": "Anchored toasts"
+      },
+      {
+        "id": "position",
+        "heading": "Custom position"
+      },
+      {
+        "id": "undo",
+        "heading": "Undo action"
+      },
+      {
+        "id": "promise",
+        "heading": "Promise"
+      },
+      {
+        "id": "custom",
+        "heading": "Custom"
+      },
+      {
+        "id": "deduplicate",
+        "heading": "Deduplicated toast"
+      },
+      {
+        "id": "varying-heights",
+        "heading": "Varying heights"
+      }
+    ]
+  },
+  {
+    "slug": "toggle",
+    "title": "Toggle",
+    "subtitle": "A two-state button that can be on or off.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "toggle-group",
+    "title": "Toggle Group",
+    "subtitle": "Provides a shared state to a series of toggle buttons.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "multiple",
+        "heading": "Multiple"
+      }
+    ]
+  },
+  {
+    "slug": "toolbar",
+    "title": "Toolbar",
+    "subtitle": "A container for grouping a set of buttons and controls.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      }
+    ]
+  },
+  {
+    "slug": "tooltip",
+    "title": "Tooltip",
+    "subtitle": "A popup that appears when an element is hovered or focused, showing a hint for sighted users.",
+    "demos": [
+      {
+        "id": "hero",
+        "heading": null
+      },
+      {
+        "id": "detached-triggers-simple",
+        "heading": "Detached triggers"
+      },
+      {
+        "id": "detached-triggers-controlled",
+        "heading": "Controlled mode with multiple triggers"
+      },
+      {
+        "id": "detached-triggers-full",
+        "heading": "Animating the Tooltip"
+      }
+    ]
+  }
+]

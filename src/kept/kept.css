@@ -1,0 +1,370 @@
+/*
+ * Kept (lab recreation). Ported from the base-ui.com homepage: (website)/css/components/*.css
+ * plus the grid utilities its layout uses. Tokens come from src/docs.css; every class is Kept-prefixed.
+ * Breakpoints match the site: bp2 48rem, bp3 64rem, bp4 80rem.
+ */
+@layer components {
+  /* Body.css + layout padding (bui-p-6 bp2:bui-py-7 bp2:bui-px-9) */
+  .KeptBody {
+    min-height: 100dvh;
+    padding: 1.5rem;
+    color: var(--gray-t2);
+    background-color: var(--gray-s1);
+
+    @media (min-width: 48rem) {
+      padding: 2rem 3rem;
+    }
+  }
+
+  /* bui-d-g bui-gtc-8 bui-g-8 bp2:bui-g-9, max 1480px */
+  .KeptGrid {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: 2.5rem;
+    max-width: 1480px;
+    margin-inline: auto;
+
+    @media (min-width: 48rem) {
+      gap: 3rem;
+    }
+  }
+
+  /* header / main / section / footer are transparent to the grid */
+  .KeptContents {
+    display: contents;
+  }
+
+  /* ─── Grid placement ─── */
+  .KeptCol-full,
+  .KeptCol-hero,
+  .KeptCol-label,
+  .KeptCol-body,
+  .KeptCol-separator {
+    grid-column: 1 / 9;
+  }
+
+  .KeptCol-logo {
+    grid-column: 1 / 5;
+  }
+
+  .KeptCol-nav {
+    grid-column: 5 / 9;
+
+    @media (min-width: 64rem) {
+      grid-column: 5 / 7;
+    }
+  }
+
+  .KeptCol-status {
+    display: none;
+
+    @media (min-width: 64rem) {
+      display: block;
+      grid-column: 7 / 9;
+    }
+  }
+
+  .KeptCol-hero {
+    @media (min-width: 80rem) {
+      grid-column: 1 / 5;
+    }
+  }
+
+  .KeptCol-label {
+    @media (min-width: 48rem) {
+      grid-column: 1 / 3;
+    }
+  }
+
+  .KeptCol-body {
+    @media (min-width: 48rem) {
+      grid-column: 3 / 9;
+    }
+
+    @media (min-width: 80rem) {
+      grid-column: 3 / 7;
+    }
+  }
+
+  .KeptCol-separator {
+    @media (min-width: 64rem) {
+      grid-column: 3 / 9;
+    }
+  }
+
+  .KeptStack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .KeptStack-4 {
+    gap: 1rem;
+  }
+
+  /* ─── Text.css ─── */
+  .KeptText1,
+  .KeptText2,
+  .KeptDisplay {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
+    text-wrap: pretty;
+  }
+
+  .KeptText1 {
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .KeptText2 {
+    font-size: 18px;
+    line-height: 25px;
+  }
+
+  /* sz-3, bp2:sz-4 */
+  .KeptDisplay {
+    font-family: var(--font-sans-b);
+    font-size: 34px;
+    line-height: 34px;
+    text-wrap: balance;
+
+    @media (min-width: 48rem) {
+      font-size: 42px;
+      line-height: 44px;
+    }
+  }
+
+  .KeptMuted {
+    color: var(--gray-t1);
+  }
+
+  .KeptWordmark {
+    align-self: start;
+    width: fit-content;
+    font-family: var(--font-sans-b);
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: inherit;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:active {
+      color: var(--gray-p1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+      border-radius: var(--radius-4);
+    }
+  }
+
+  /* ─── Link.css ─── */
+  .KeptLink {
+    display: inline;
+    width: fit-content;
+    color: currentColor;
+    -webkit-tap-highlight-color: transparent;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+
+    &:active {
+      background-color: var(--gray-t2);
+      color: var(--gray-s1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+      border-radius: var(--radius-4);
+    }
+
+    /* You are here */
+    &[aria-current='page'] {
+      text-decoration: none;
+      color: var(--gray-t1);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .KeptLinkArrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    svg {
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .KeptArrowLine {
+      opacity: 0;
+      transition: opacity 100ms ease;
+    }
+
+    .KeptArrowCaret {
+      transition: transform 100ms ease;
+    }
+
+    @media (hover: hover) {
+      &:hover .KeptArrowLine {
+        opacity: 1;
+      }
+
+      &:hover .KeptArrowCaret {
+        transform: translateX(4px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .KeptArrowLine,
+      .KeptArrowCaret {
+        transition: none;
+      }
+    }
+  }
+
+  /* ─── List.css (the team list) ─── */
+  .KeptList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--gray-t2);
+  }
+
+  .KeptListItem {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem;
+    padding-block: 12px;
+    border-bottom: 1px solid var(--gray-t2);
+
+    @media (min-width: 64rem) {
+      gap: 3rem;
+    }
+  }
+
+  /* ─── Separator.css ─── */
+  .KeptSeparator {
+    height: 1px;
+    width: 32px;
+    background-color: var(--gray-s2);
+  }
+}
+
+/* ─── Forms (Auth shell): fields are rows of the ruled list ─── */
+@layer components {
+  .KeptForm {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* Label over input on phones; label | input columns like the list from 48rem */
+  .KeptField {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.25rem;
+
+    @media (min-width: 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 3rem;
+    }
+
+    /* The rule thickens under the field you're typing in */
+    &:has(:focus-visible) {
+      box-shadow: inset 0 -1px 0 var(--gray-t2);
+    }
+  }
+
+  .KeptFieldLabel {
+    color: var(--gray-t1);
+
+    @media (min-width: 48rem) {
+      color: inherit;
+    }
+  }
+
+  .KeptFieldBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .KeptInput {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    outline: 0;
+    appearance: none;
+    /* 18px also keeps iOS Safari from zooming on focus */
+
+    &::placeholder {
+      color: var(--gray-p1);
+      opacity: 1;
+    }
+
+    /* Keep browser autofill from painting a yellow box */
+    &:-webkit-autofill {
+      -webkit-text-fill-color: var(--gray-t2);
+      box-shadow: inset 0 0 0 100px var(--gray-s1);
+      caret-color: var(--gray-t2);
+    }
+  }
+
+  .KeptFieldError {
+    color: var(--poppy-t1);
+  }
+
+  .KeptFormActions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  /* A Base UI Button that looks like the arrow link */
+  .KeptButtonReset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 18px;
+    line-height: 25px;
+    cursor: pointer;
+
+    &[data-disabled] {
+      color: var(--gray-t1);
+      cursor: default;
+      text-decoration: none;
+
+      .KeptArrowCaret {
+        transform: none;
+      }
+    }
+  }
+}
+
+@layer components {
+  /* A ruled list stretched to its column (the Access rows) */
+  .KeptListFill {
+    align-self: stretch;
+  }
+}

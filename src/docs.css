@@ -1,0 +1,860 @@
+/*
+ * Shell styles copied from base-ui.com (docs/src/css, SideNav.css, Demo.css, mdx-components.css).
+ * Everything lives in layers so the unlayered demo CSS Modules always win, like on the docs site.
+ */
+@layer all, theme, components;
+
+@font-face {
+  font-family: 'die grotesk a';
+  font-weight: normal;
+  src: url('/fonts/die-grotesk-a-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'die grotesk a';
+  font-weight: 700;
+  src: url('/fonts/die-grotesk-a-bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'die grotesk b';
+  font-weight: normal;
+  src: url('/fonts/die-grotesk-b-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'die grotesk b';
+  font-weight: 700;
+  src: url('/fonts/die-grotesk-b-bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Paper Mono';
+  font-weight: normal;
+  src: url('/fonts/paper-mono.woff2') format('woff2');
+  font-variation-settings: 'wght' 415;
+  size-adjust: calc(100% * 13.5 / 14);
+}
+
+@layer theme {
+  :root {
+    --gray-s1: hsl(0deg 0% 99%);
+    --gray-s2: hsl(0deg 0% 97.5%);
+    --gray-c1: hsl(0deg 0% 95.25%);
+    --gray-c2: hsl(0deg 0% 94%);
+    --gray-c3: hsl(0deg 0% 88%);
+    --gray-p1: hsl(0deg 0% 55%);
+    --gray-p2: hsl(0deg 0% 51%);
+    --gray-t1: hsl(0deg 0% 46.4%);
+    --gray-t2: hsl(0deg 0% 18%);
+    --blackA-2: hsl(0deg 0% 0% / 8%);
+    --whiteA-5: hsl(0deg 0% 100% / 24%);
+    --poppy-t1: hsl(10deg 86% 48%);
+    --green-t1: hsl(156deg 81% 29%);
+
+    --color-content: white;
+    --color-background: var(--gray-s2);
+    --color-foreground: var(--gray-t2);
+    --color-border: var(--blackA-2);
+    --color-selection: hsl(0deg 0% 92%);
+
+    --font-sans: 'die grotesk a', system-ui, sans-serif;
+    --font-sans-b: 'die grotesk b', system-ui, sans-serif;
+    --font-mono: 'Paper Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --gray-p2: hsl(0deg 0% 51%);
+    --color-popup: white;
+    --radius-4: 0.25rem;
+    --radius-6: 0.375rem;
+    --radius-8: 0.5rem;
+    --radius-12: 0.75rem;
+    --radius-36: 2.25rem;
+    --radius-pill: 9999px;
+    --header-height: 3rem;
+    --sidebar-width: 15rem;
+    --layout-padding-x: 1.5rem;
+    --breakpoint-max-layout-width: 89rem;
+  }
+
+  @media (min-width: 40rem) {
+    :root {
+      --layout-padding-x: 2.5rem;
+    }
+  }
+
+  @media (min-width: 48rem) {
+    :root {
+      --layout-padding-x: 3rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    :root {
+      --header-height: 4rem;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --gray-s1: hsl(0deg 0% 7.5%);
+      --gray-s2: hsl(0deg 0% 10%);
+      --gray-c1: hsl(0deg 0% 13%);
+      --gray-c2: hsl(0deg 0% 16%);
+      --gray-c3: hsl(0deg 0% 32%);
+      --gray-p1: hsl(0deg 0% 60%);
+      --gray-p2: hsl(0deg 0% 64%);
+      --gray-t1: hsl(0deg 0% 70%);
+      --gray-t2: hsl(0deg 0% 90%);
+
+      --color-content: black;
+      --color-background: black;
+      --color-border: var(--whiteA-5);
+      --color-selection: hsl(0deg 0% 18%);
+      --color-popup: var(--gray-s1);
+      --poppy-t1: hsl(10deg 96% 63%);
+      --green-t1: hsl(156deg 68% 54%);
+    }
+  }
+}
+
+@layer all {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    color-scheme: light dark;
+    word-break: break-word;
+  }
+
+  body {
+    margin: 0;
+    /* Base UI quick start: needed for iOS 26+ Safari backdrops */
+    position: relative;
+    background-color: var(--color-content);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.5;
+    font-synthesis: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-y: scroll;
+    font-feature-settings:
+      'ss02' 1,
+      'zero' 1;
+  }
+
+  ::selection {
+    background-color: var(--color-selection);
+  }
+
+  /* Base UI quick start: popups portal above page content without z-index fights */
+  .root {
+    isolation: isolate;
+  }
+
+  /* Demos and their portalled popups don't use Die Grotesk's OpenType features */
+  [data-demo],
+  [data-base-ui-portal] {
+    font-feature-settings: normal;
+  }
+}
+
+@layer components {
+  /* ─── Header ─── */
+  .Header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    height: var(--header-height);
+    background: var(--color-content);
+    font-size: 0.9375rem;
+    line-height: 1.375rem;
+  }
+
+  .HeaderInner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    max-width: var(--breakpoint-max-layout-width);
+    margin-inline: auto;
+    padding-inline: var(--layout-padding-x);
+  }
+
+  .HeaderLogoLink {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.25rem 0.5rem;
+    margin: -0.25rem -0.5rem;
+    color: inherit;
+    text-decoration: none;
+
+    &:active {
+      color: var(--gray-p1);
+    }
+
+    &:focus-visible {
+      border-radius: var(--radius-6);
+      outline: 2px solid var(--gray-t2);
+      outline-offset: -1px;
+    }
+  }
+
+  .HeaderTag {
+    color: var(--gray-t1);
+  }
+
+  .HeaderLinks {
+    display: flex;
+    gap: 1.5rem;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      @media (hover: hover) {
+        &:hover {
+          text-decoration: underline;
+          text-underline-offset: 2px;
+          text-decoration-thickness: 1px;
+        }
+      }
+    }
+  }
+
+  .HeaderLinks {
+    align-items: center;
+  }
+
+  /* On phones the Docs link yields to the search/menu trigger */
+  .HeaderDocsLink {
+    display: none;
+
+    @media (min-width: 40rem) {
+      display: inline;
+    }
+  }
+
+  .GhostButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: 1.75rem;
+    padding-inline: 0.5rem;
+    margin-inline-end: -0.5rem;
+    border: 0;
+    border-radius: var(--radius-8);
+    background: none;
+    color: var(--gray-t2);
+    font: inherit;
+    font-size: 0.8125rem;
+    line-height: 1;
+    cursor: default;
+    outline: 0;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &:focus-visible {
+      outline: 2px solid var(--gray-t2);
+      outline-offset: -1px;
+    }
+
+    &:not(:focus-visible) {
+      @media (hover: hover) {
+        &:hover {
+          background-color: var(--gray-c1);
+        }
+      }
+
+      &:active,
+      &[data-popup-open] {
+        background-color: var(--gray-c1);
+      }
+    }
+  }
+
+  .MobileNavTrigger {
+    @media (min-width: 64rem) {
+      display: none;
+    }
+  }
+
+  /* ─── Layout ─── */
+  .Layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: var(--breakpoint-max-layout-width);
+    margin-inline: auto;
+    padding-inline: var(--layout-padding-x);
+
+    @media (min-width: 64rem) {
+      grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+    }
+  }
+
+  /* ─── Side nav ─── */
+  .SideNav {
+    --item-height: 1.75rem;
+    --item-line-height: 1.375rem;
+    --item-padding-y: calc(var(--item-height) / 2 - var(--item-line-height) / 2);
+    --link-padding-x: 0.5rem;
+
+    display: none;
+    font-size: 0.875rem;
+    line-height: var(--item-line-height);
+
+    @media (min-width: 64rem) {
+      display: block;
+      position: sticky;
+      top: var(--header-height);
+      align-self: start;
+      max-height: calc(100dvh - var(--header-height));
+      overflow-y: auto;
+      scrollbar-width: none;
+      padding: 0 2.5rem 2.5rem 0;
+    }
+  }
+
+  .SideNavSection:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  .SideNavHeading {
+    display: inline-flex;
+    padding-block: var(--item-padding-y);
+    color: var(--gray-t1);
+  }
+
+  .SideNavList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .SideNavLink {
+    display: block;
+    padding-block: calc(var(--item-padding-y) - 1px);
+    padding-inline: var(--link-padding-x);
+    margin-inline-start: calc(-1 * var(--link-padding-x));
+    border-block: 1px solid transparent;
+    background-clip: padding-box;
+    border-radius: var(--radius-6);
+    color: inherit;
+    text-decoration: none;
+    user-select: none;
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        text-decoration-thickness: 1px;
+        text-decoration-color: var(--gray-t2);
+      }
+    }
+
+    &[data-active] {
+      border: none;
+      padding-block: var(--item-padding-y);
+      background-color: var(--gray-s2);
+      outline: 1px solid var(--gray-c2);
+      outline-offset: -1px;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--gray-t2);
+      outline-offset: -2px;
+    }
+  }
+
+  /* ─── Content ─── */
+  .Content {
+    min-width: 0;
+    max-width: 48rem;
+    padding-top: 0.5rem;
+    padding-bottom: 6rem;
+  }
+
+  .MdH1 {
+    margin: 0 0 1rem;
+    font-family: var(--font-sans-b);
+    font-size: 2.125rem;
+    line-height: 2.7rem;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  .MdH2 {
+    margin: 2.5rem 0 1rem;
+    font-family: var(--font-sans-b);
+    font-size: 1.3125rem;
+    line-height: 1.625rem;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  .MdH3 {
+    margin: 2rem 0 0.75rem;
+    font-family: var(--font-sans-b);
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  .Subtitle {
+    margin: -0.75rem 0 1.5rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    text-wrap: pretty;
+    color: var(--gray-t1);
+  }
+
+  .Paragraph {
+    margin: 0 0 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.5rem;
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      padding: 0.0625rem 0.3125rem;
+      border: 1px solid var(--gray-c2);
+      border-radius: var(--radius-6);
+      background-color: var(--gray-s2);
+    }
+  }
+
+  /* ─── Demo frame ─── */
+  .DemoRoot {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-12);
+    margin-bottom: 1.5rem;
+  }
+
+  .DemoPlayground {
+    position: relative;
+    background-color: var(--color-content);
+    border-radius: calc(var(--radius-12) - 1px);
+    overflow: auto hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  .DemoPlaygroundInner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 8rem;
+    min-width: fit-content;
+    padding: 2rem 1.5rem;
+  }
+
+  .DemoError {
+    color: var(--gray-t1);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .DemoSource {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--color-border);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--gray-t1);
+
+    /* The file path is desktop-only detail */
+    > :last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      @media (max-width: 39.99rem) {
+        display: none;
+      }
+    }
+  }
+}
+
+/* ─── Mobile nav bottom sheet (ported from base-ui.com MobileNav.css) ─── */
+@layer components {
+  .bui-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .MobileNavTriggerIcon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
+
+  .MobileNavBackdrop {
+    position: fixed;
+    inset: 0;
+    min-height: 100dvh;
+    opacity: calc(1 - var(--drawer-swipe-progress, 0));
+    background-color: rgb(0 0 0 / 10%);
+    transition: opacity 300ms cubic-bezier(0.32, 0.72, 0, 1);
+
+    @supports (-webkit-touch-callout: none) {
+      /* iOS 26+: cover the entire visible viewport */
+      position: absolute;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      background-color: rgb(0 0 0 / 40%);
+    }
+
+    &[data-starting-style],
+    &[data-ending-style] {
+      opacity: 0;
+    }
+
+    &[data-swiping] {
+      transition-duration: 0ms;
+    }
+
+    &[data-ending-style] {
+      transition-duration: calc(var(--drawer-swipe-strength, 1) * 400ms);
+    }
+  }
+
+  .MobileNavViewport {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    touch-action: none;
+  }
+
+  .MobileNavPopup {
+    --mobile-nav-bleed: 3rem;
+    --mobile-nav-item-height: 2.5rem;
+    --mobile-nav-item-padding-x: 1.75rem;
+    --mobile-nav-shadow-clearance: 5rem;
+
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    height: calc(100dvh - 0.25rem + var(--mobile-nav-bleed));
+    max-height: calc(100dvh - 0.25rem + var(--mobile-nav-bleed));
+    margin-bottom: calc(-1 * var(--mobile-nav-bleed));
+    /* Mimic iOS bottom sheets */
+    border-top-left-radius: var(--radius-36);
+    border-top-right-radius: var(--radius-36);
+    background-color: var(--color-popup);
+    color: var(--gray-t2);
+    font-size: 1rem;
+    line-height: 1.5;
+    outline: 0;
+    touch-action: none;
+    box-shadow:
+      0 10px 64px -10px rgb(36 40 52 / 20%),
+      0 0.25px 0 1px var(--color-border);
+    transform: translateY(var(--drawer-swipe-movement-y, 0px));
+    transition: transform 340ms cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+
+    @media (prefers-color-scheme: dark) {
+      box-shadow: 0 0 0 1px var(--color-border);
+    }
+
+    &[data-swiping] {
+      user-select: none;
+    }
+
+    &[data-starting-style] {
+      transform: translateY(calc(100% - var(--mobile-nav-bleed) + 2px));
+    }
+
+    &[data-ending-style] {
+      transform: translateY(
+        calc(100% - var(--mobile-nav-bleed) + var(--mobile-nav-shadow-clearance))
+      );
+      transition-duration: calc(var(--drawer-swipe-strength, 1) * 400ms);
+    }
+
+    @media (min-width: 40rem) {
+      width: calc(100% - 6rem);
+      max-width: 40rem;
+    }
+
+    @media (min-height: 27rem) {
+      /* Taller screens leave the header visible above the sheet */
+      height: calc(100dvh - var(--header-height) + var(--mobile-nav-bleed));
+      max-height: calc(100dvh - var(--header-height) + var(--mobile-nav-bleed));
+    }
+  }
+
+  .MobileNavSearchHeader {
+    position: relative;
+    flex-shrink: 0;
+    padding: 1rem 1rem 0;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .MobileNavHandle {
+    position: absolute;
+    top: 0.3125rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3.5rem;
+    height: 0.3125rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-border);
+  }
+
+  .MobileNavSearchInputRoot {
+    position: relative;
+  }
+
+  .MobileNavSearchIcon {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    z-index: 1;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    color: var(--gray-t1);
+    pointer-events: none;
+  }
+
+  .MobileNavSearchInput {
+    display: block;
+    min-width: 0;
+    width: 100%;
+    height: 2.5rem;
+    margin: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background-color: var(--gray-c1);
+    padding-left: 2.25rem;
+    padding-right: 2rem;
+    /* 16px keeps iOS Safari from zooming on focus */
+    font: inherit;
+    font-size: 1rem;
+    color: var(--gray-t2);
+    outline: 0;
+
+    &::placeholder {
+      color: var(--gray-t1);
+    }
+  }
+
+  .MobileNavClearSearch {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    z-index: 1;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 100%;
+    background: none;
+    color: var(--gray-t2);
+    outline: 0;
+
+    > svg {
+      pointer-events: none;
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--gray-c3);
+      }
+    }
+
+    @media not (hover: hover) {
+      &:active {
+        background-color: var(--gray-c2);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--gray-t2);
+      outline-offset: -1px;
+    }
+  }
+
+  .MobileNavContent,
+  .MobileNavScrollAreaRoot,
+  .MobileNavScrollAreaViewport {
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .MobileNavContent,
+  .MobileNavScrollAreaRoot {
+    display: flex;
+  }
+
+  .MobileNavContent {
+    flex: 1 1 auto;
+    touch-action: auto;
+  }
+
+  .MobileNavScrollAreaRoot {
+    --mobile-nav-scroll-scrim-size: 1rem;
+    --mobile-nav-scroll-bottom-inset: calc(
+      var(--mobile-nav-bleed) + var(--drawer-keyboard-inset, 0px)
+    );
+    position: relative;
+    flex: 1;
+  }
+
+  .MobileNavScrollAreaViewport {
+    --mobile-nav-scroll-scrim-start: min(
+      var(--mobile-nav-scroll-scrim-size),
+      var(--scroll-area-overflow-y-start, 0px)
+    );
+    --mobile-nav-scroll-scrim-end: min(
+      var(--mobile-nav-scroll-scrim-size),
+      var(--scroll-area-overflow-y-end, var(--mobile-nav-scroll-scrim-size))
+    );
+    --mobile-nav-scroll-scrim-end-stop: calc(100% - var(--mobile-nav-scroll-bottom-inset));
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    padding-bottom: var(--mobile-nav-scroll-bottom-inset);
+    /* Soft fade at the scroll edges */
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      black var(--mobile-nav-scroll-scrim-start),
+      black calc(var(--mobile-nav-scroll-scrim-end-stop) - var(--mobile-nav-scroll-scrim-end)),
+      transparent var(--mobile-nav-scroll-scrim-end-stop),
+      transparent 100%
+    );
+    mask-repeat: no-repeat;
+    scroll-padding-top: var(--mobile-nav-scroll-scrim-size);
+    outline: 0;
+
+    &:focus-visible {
+      outline: 2px solid var(--gray-t2);
+      outline-offset: -2px;
+    }
+  }
+
+  .MobileNavScrollAreaContent {
+    min-width: 0 !important;
+  }
+
+  .MobileNavScrollbar {
+    display: flex;
+    padding-top: 0.5rem;
+    padding-bottom: calc(0.5rem + var(--mobile-nav-scroll-bottom-inset));
+    width: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 250ms;
+
+    &[data-hovering],
+    &[data-scrolling],
+    &:hover {
+      opacity: 1;
+      pointer-events: auto;
+      transition-duration: 75ms;
+    }
+  }
+
+  .MobileNavScrollbarThumb {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+    &::before {
+      content: '';
+      display: block;
+      height: 100%;
+      width: 0.25rem;
+      border-radius: var(--radius-4);
+      background-color: var(--gray-p2);
+    }
+  }
+
+  .MobileNavPanel {
+    padding-block: var(--mobile-nav-scroll-scrim-size)
+      calc(1rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .MobileNavSection:not(:last-of-type) {
+    margin-bottom: 1.5rem;
+  }
+
+  .MobileNavHeading {
+    display: flex;
+    align-items: center;
+    margin-inline: var(--mobile-nav-item-padding-x);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1;
+    color: var(--gray-t1);
+  }
+
+  .MobileNavList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .MobileNavLink {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    height: var(--mobile-nav-item-height);
+    padding-inline: var(--mobile-nav-item-padding-x);
+    color: var(--gray-t2);
+    text-decoration: none;
+    outline: 0;
+    -webkit-tap-highlight-color: var(--gray-c3);
+
+    &:focus-visible {
+      outline: 2px solid var(--gray-t2);
+      outline-offset: -2px;
+    }
+
+    &[data-active] {
+      background-color: var(--gray-c1);
+    }
+
+    @media (hover: hover) {
+      &:not([data-active]):hover .MobileNavLinkText {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-thickness: 1px;
+      }
+    }
+  }
+
+  .MobileNavEmptyState {
+    padding: 1.5rem 0.75rem;
+    text-align: center;
+    line-height: 1;
+    color: var(--gray-t1);
+  }
+}
