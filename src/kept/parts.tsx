@@ -86,3 +86,25 @@ export function useDocumentTitle(title: string | undefined) {
     if (title) document.title = title;
   }, [title]);
 }
+
+// "fontsinuse.com" for a captured URL, "Uploaded" for a file from disk
+export function sourceLabel(captureUrl: string | null) {
+  if (!captureUrl) return 'Uploaded';
+  try {
+    return new URL(captureUrl).hostname.replace(/^www\./, '');
+  } catch {
+    return captureUrl;
+  }
+}
+
+export function formatBytes(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`;
+  const units = ['KB', 'MB', 'GB'];
+  let value = bytes / 1024;
+  let unit = 0;
+  while (value >= 1024 && unit < units.length - 1) {
+    value /= 1024;
+    unit += 1;
+  }
+  return `${value.toFixed(value < 10 ? 1 : 0)} ${units[unit]}`;
+}

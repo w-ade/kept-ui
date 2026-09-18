@@ -2,7 +2,14 @@ import * as React from 'react';
 import { Button } from '@base-ui/react/button';
 import { Field } from '@base-ui/react/field';
 import { Input } from '@base-ui/react/input';
-import { ArrowIcon, BackLink, Separator, formatDate, useDocumentTitle } from './parts.tsx';
+import {
+  ArrowIcon,
+  BackLink,
+  Separator,
+  formatBytes,
+  formatDate,
+  useDocumentTitle,
+} from './parts.tsx';
 import {
   getCollection,
   listReferences,
@@ -123,6 +130,7 @@ export function KeptReference({
         </div>
       </section>
 
+      {/* Meaning first */}
       <Separator />
       <section className="KeptContents" aria-labelledby="kept-image">
         <div className="KeptStack KeptStack-4 KeptCol-label">
@@ -136,42 +144,6 @@ export function KeptReference({
             pins={reference.pins}
             onAdd={(pin) => save({ pins: [...reference.pins, pin] })}
           />
-        </div>
-      </section>
-
-      <Separator />
-      <section className="KeptContents" aria-labelledby="kept-details">
-        <h2 id="kept-details" className="KeptText2 KeptCol-label">
-          Details
-        </h2>
-        <div className="KeptCol-body">
-          <dl className="KeptList KeptDetails">
-            <DetailRow term="Source">
-              {reference.source === 'Own scan' ? (
-                reference.source
-              ) : (
-                <a
-                  className="KeptLink"
-                  href={`https://${reference.source}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {reference.source}
-                </a>
-              )}
-            </DetailRow>
-            <DetailRow term="Year">{reference.year}</DetailRow>
-            <DetailRow term="Added">{formatDate(reference.addedAt)}</DetailRow>
-            <DetailRow term="Dimensions">
-              {reference.width} × {reference.height}
-            </DetailRow>
-            <DetailRow term="Format">{reference.format}</DetailRow>
-            <DetailRow term="Collection">
-              <a className="KeptLink" href={collectionHref}>
-                {collection.name}
-              </a>
-            </DetailRow>
-          </dl>
         </div>
       </section>
 
@@ -205,13 +177,61 @@ export function KeptReference({
       <Separator />
       <section className="KeptContents" aria-labelledby="kept-pins">
         <h2 id="kept-pins" className="KeptText2 KeptCol-label">
-          Pins
+          Annotations
         </h2>
         <div className="KeptCol-body">
-          <PinList
-            pins={reference.pins}
-            onChange={(pins) => save({ pins })}
-          />
+          <PinList pins={reference.pins} onChange={(pins) => save({ pins })} />
+        </div>
+      </section>
+
+      <Separator />
+      <section className="KeptContents" aria-labelledby="kept-collections">
+        <h2 id="kept-collections" className="KeptText2 KeptCol-label">
+          Collections
+        </h2>
+        <div className="KeptCol-body">
+          <ul className="KeptList">
+            <li className="KeptListItem KeptListSingle">
+              <a className="KeptLink KeptText2" href={collectionHref}>
+                {collection.name}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      {/* File facts second */}
+      <Separator />
+      <section className="KeptContents" aria-labelledby="kept-file">
+        <h2 id="kept-file" className="KeptText2 KeptCol-label">
+          File
+        </h2>
+        <div className="KeptCol-body">
+          <dl className="KeptList KeptDetails">
+            <DetailRow term="Name">
+              <span className="KeptBreakAll">{reference.fileName}</span>
+            </DetailRow>
+            <DetailRow term="Type">{reference.fileType}</DetailRow>
+            <DetailRow term="Pixel size">
+              {reference.width} × {reference.height}
+            </DetailRow>
+            <DetailRow term="Size">{formatBytes(reference.bytes)}</DetailRow>
+            <DetailRow term="Added">{formatDate(reference.addedAt)}</DetailRow>
+            <DetailRow term="Source">
+              {reference.captureUrl ? (
+                <a
+                  className="KeptLink KeptBreakAll"
+                  href={reference.captureUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {reference.captureUrl.replace(/^https?:\/\/(www\.)?/, '')}
+                </a>
+              ) : (
+                'Uploaded'
+              )}
+            </DetailRow>
+          </dl>
         </div>
       </section>
     </PinFocusProvider>
@@ -339,7 +359,7 @@ function PinList({ pins, onChange }: { pins: Pin[]; onChange: (pins: Pin[]) => v
   }, [focusRequest, pins, requestFocus]);
 
   if (pins.length === 0) {
-    return <p className="KeptText2 KeptMuted">No pins yet. Tap the image to add one.</p>;
+    return <p className="KeptText2 KeptMuted">No annotations yet. Tap the image to drop a pin.</p>;
   }
 
   return (

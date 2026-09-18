@@ -926,3 +926,206 @@
     }
   }
 }
+
+/* ─── Sharing ─── */
+@layer components {
+  .KeptStack-2 {
+    gap: 0.5rem;
+  }
+
+  /* "Share as a board ›" sitting inline in a sentence */
+  .KeptInlineTrigger {
+    display: inline-flex;
+    vertical-align: bottom;
+    color: var(--gray-t2);
+  }
+
+  .KeptDialogList {
+    margin-top: 1rem;
+  }
+
+  .KeptCopyRow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+
+    .KeptInput {
+      flex: 1;
+    }
+  }
+
+  .KeptDialogSecondary {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.75rem;
+  }
+
+  .KeptDialogFooter {
+    margin-top: 1.5rem;
+  }
+
+  .KeptDanger {
+    color: var(--poppy-t1);
+  }
+
+  /* Disabled text buttons read as unavailable, not as links */
+  .KeptButtonReset:disabled,
+  .KeptButtonReset[data-disabled] {
+    color: var(--gray-p1);
+    text-decoration: none;
+    cursor: default;
+
+    .KeptArrowLine {
+      opacity: 0;
+    }
+
+    .KeptArrowCaret {
+      transform: none;
+    }
+  }
+}
+
+/* ─── Board shell (/m/:token) ─── */
+@layer components {
+  /* Full-bleed moodboard grid: tighter than the site grid so images read as one surface */
+  .KeptBoardGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @media (min-width: 48rem) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+    }
+
+    @media (min-width: 64rem) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    @media (min-width: 80rem) {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+
+  .KeptBoardItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: zoom-in;
+    -webkit-tap-highlight-color: transparent;
+    outline: 0;
+
+    &:focus-visible .KeptImage {
+      outline: 2px solid var(--gray-t2);
+      outline-offset: 2px;
+    }
+
+    &:active .KeptImage {
+      background-color: var(--gray-c2);
+    }
+
+    @media (hover: hover) {
+      &:hover .KeptFigureName {
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 4px;
+      }
+    }
+  }
+
+  .KeptBoardFooter {
+    padding-top: 1rem;
+  }
+
+  /* Lightbox: a full-screen Base UI Dialog */
+  .KeptLightbox {
+    position: fixed;
+    inset: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--gray-s1);
+    color: var(--gray-t2);
+    outline: 0;
+    transition: opacity 150ms ease-out;
+
+    &[data-starting-style],
+    &[data-ending-style] {
+      opacity: 0;
+    }
+  }
+
+  .KeptLightboxInner {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 44rem;
+    min-height: 100%;
+    margin-inline: auto;
+    padding: 1.5rem;
+    padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    align-content: start;
+
+    @media (min-width: 48rem) {
+      padding: 2rem 3rem;
+    }
+  }
+
+  .KeptLightboxBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .KeptLightboxImage {
+    display: flex;
+    justify-content: center;
+  }
+
+  /* As large as fits, but always leave room to see the caption begin */
+  .KeptLightboxSquare {
+    width: min(100%, 70dvh);
+  }
+
+  .KeptLightboxText {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .KeptLightboxPins {
+    margin-top: 0.5rem;
+  }
+
+  .KeptPinRowStatic {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+  }
+
+  .KeptLightboxNav {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 0.5rem;
+  }
+}
+
+@layer components {
+  /* A ruled list row with a single value */
+  .KeptListSingle {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* File names and URLs wrap anywhere rather than overflow */
+  .KeptBreakAll {
+    word-break: break-all;
+  }
+}

@@ -16,19 +16,24 @@ export interface Pin {
   caption: string;
 }
 
+// A Reference is the unit of meaning; its file (the Asset) carries the file facts.
+// v0 has one asset per reference.
 export interface Reference {
   id: string;
   collectionId: string;
   title: string;
-  source: string;
-  year: number;
-  addedAt: string; // ISO date
-  width: number;
-  height: number;
-  format: string;
   notes: string;
   tags: string[];
   pins: Pin[];
+  addedAt: string; // ISO date
+  // Where it was captured from; null when it was uploaded from disk
+  captureUrl: string | null;
+  // Asset (file) facts
+  fileName: string;
+  fileType: string;
+  width: number;
+  height: number;
+  bytes: number;
 }
 
 let collections: Collection[] = [
@@ -151,14 +156,15 @@ const TITLES: Record<string, string[]> = {
   ],
 };
 
-const SOURCES = [
-  'archive.org',
-  'fontsinuse.com',
-  'are.na',
-  'letterformarchive.org',
-  'collection.cooperhewitt.org',
-  'flickr.com',
-  'Own scan',
+// Capture sources; null means uploaded from disk.
+const SOURCES: (string | null)[] = [
+  'https://archive.org/details/',
+  'https://fontsinuse.com/uses/',
+  'https://www.are.na/block/',
+  'https://letterformarchive.org/items/',
+  'https://collection.cooperhewitt.org/objects/',
+  'https://www.flickr.com/photos/archive/',
+  null,
 ];
 
 const TAGS: Record<string, string[]> = {
@@ -171,7 +177,12 @@ const TAGS: Record<string, string[]> = {
   'annual-reports': ['charts', 'covers', 'data', 'grid'],
 };
 
-const FORMATS = ['JPG', 'PNG', 'TIFF', 'WEBP'];
+const FORMATS: { type: string; ext: string; bytesPerPixel: number }[] = [
+  { type: 'JPEG', ext: 'jpg', bytesPerPixel: 0.35 },
+  { type: 'PNG', ext: 'png', bytesPerPixel: 1.4 },
+  { type: 'TIFF', ext: 'tif', bytesPerPixel: 3 },
+  { type: 'WebP', ext: 'webp', bytesPerPixel: 0.25 },
+];
 const SIZES = [
   [2400, 2400],
   [3000, 2000],
@@ -206,16 +217,20 @@ function generateReferences(collection: Collection): Reference[] {
     const added = new Date(updated);
     added.setDate(added.getDate() - i * 2);
     const tags = tagPool.filter(() => random() < 0.35).slice(0, 3);
+    const format = pick(FORMATS);
+    const source = pick(SOURCES);
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     return {
       id: `${collection.id}-${String(i + 1).padStart(3, '0')}`,
       collectionId: collection.id,
       title,
-      source: pick(SOURCES),
-      year: 1950 + Math.floor(random() * 70),
       addedAt: added.toISOString().slice(0, 10),
+      captureUrl: source ? `${source}${10000 + Math.floor(random() * 89999)}` : null,
+      fileName: `${slug}.${format.ext}`,
+      fileType: format.type,
       width,
       height,
-      format: pick(FORMATS),
+      bytes: Math.round(width * height * format.bytesPerPixel * (0.85 + random() * 0.3)),
       notes:
         i === 0
           ? 'Tight spacing on the display sizes. Compare the lowercase g with the 1962 cut.'
@@ -232,4 +247,92 @@ function generateReferences(collection: Collection): Reference[] {
           : [],
     };
   });
+}
+
+// ─── Boards (published collections) ───
+// A collection can be published as an unlisted, read-only board at /m/:token.
+// Kept in localStorage so a copied link opens in another tab; the real app stores
+// this in collection_shares.
+
+export interface Share {
+  token: string;
+  owner: string;
+  publishedAt: string; // ISO date
+}
+
+const SHARES_KEY = 'kept.lab.shares';
+
+// One board is published from the start so there's always something to open.
+const SEED_SHARES: Record<string, Share> = {
+  'type-specimens': { token: 'tsp8f3k2qx', owner: 'wade', publishedAt: '2026-09-17' },
+};
+
+function readShares(): Record<string, Share> {
+  try {
+    const raw = localStorage.getItem(SHARES_KEY);
+    return raw ? (JSON.parse(raw) as Record<string, Share>) : { ...SEED_SHARES };
+  } catch {
+    return { ...SEED_SHARES };
+  }
+}
+
+let shares = readShares();
+
+function writeShares() {
+  try {
+    localStorage.setItem(SHARES_KEY, JSON.stringify(shares));
+  } catch {
+    // Storage blocked: sharing still works until reload.
+  }
+}
+
+// Unguessable enough for an unlisted link. getRandomValues works on plain-http LAN too.
+function newToken() {
+  const bytes = new Uint8Array(10);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => (b % 36).toString(36)).join('');
+}
+
+export async function getShare(collectionId: string): Promise<Share | undefined> {
+  return shares[collectionId];
+}
+
+export async function publishCollection(collectionId: string, owner: string): Promise<Share> {
+  const existing = shares[collectionId];
+  if (existing) return existing;
+  const share = { token: newToken(), owner, publishedAt: new Date().toISOString().slice(0, 10) };
+  shares = { ...shares, [collectionId]: share };
+  writeShares();
+  return share;
+}
+
+// A new token; the old link stops working immediately.
+export async function rotateShare(collectionId: string): Promise<Share | undefined> {
+  const existing = shares[collectionId];
+  if (!existing) return undefined;
+  const share = { ...existing, token: newToken() };
+  shares = { ...shares, [collectionId]: share };
+  writeShares();
+  return share;
+}
+
+export async function unpublishCollection(collectionId: string): Promise<void> {
+  const { [collectionId]: _removed, ...rest } = shares;
+  shares = rest;
+  writeShares();
+}
+
+export interface Board {
+  collection: Collection;
+  references: Reference[];
+  share: Share;
+}
+
+export async function getBoard(token: string): Promise<Board | undefined> {
+  const entry = Object.entries(shares).find(([, s]) => s.token === token);
+  if (!entry) return undefined;
+  const [collectionId, share] = entry;
+  const collection = collections.find((c) => c.id === collectionId);
+  if (!collection) return undefined;
+  return { collection, references: await listReferences(collectionId), share };
 }

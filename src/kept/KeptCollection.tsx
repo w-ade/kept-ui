@@ -3,8 +3,17 @@ import { Field } from '@base-ui/react/field';
 import { Input } from '@base-ui/react/input';
 import { Toggle } from '@base-ui/react/toggle';
 import { ToggleGroup } from '@base-ui/react/toggle-group';
-import { BackLink, SearchIcon, Separator, formatDate, plural, useDocumentTitle } from './parts.tsx';
+import {
+  BackLink,
+  SearchIcon,
+  Separator,
+  formatDate,
+  plural,
+  sourceLabel,
+  useDocumentTitle,
+} from './parts.tsx';
 import { getCollection, listReferences, type Collection, type Reference } from './repository.ts';
+import { ShareDialog } from './KeptShare.tsx';
 
 type View = 'grid' | 'list';
 
@@ -43,7 +52,7 @@ export function KeptCollection({ collectionId }: { collectionId: string }) {
     const q = query.trim().toLowerCase();
     if (!q) return references;
     return references.filter((r) =>
-      [r.title, r.source, r.notes, ...r.tags, ...r.pins.map((p) => p.caption)]
+      [r.title, sourceLabel(r.captureUrl), r.fileName, r.notes, ...r.tags, ...r.pins.map((p) => p.caption)]
         .join(' ')
         .toLowerCase()
         .includes(q),
@@ -81,9 +90,13 @@ export function KeptCollection({ collectionId }: { collectionId: string }) {
       </section>
 
       <section className="KeptContents">
-        <p className="KeptText2 KeptCol-body">
-          {plural(collection.referenceCount, 'reference')}. Updated {formatDate(collection.updatedAt)}.
-        </p>
+        <div className="KeptCol-body KeptStack KeptStack-2">
+          <p className="KeptText2">
+            {plural(collection.referenceCount, 'reference')}. Updated{' '}
+            {formatDate(collection.updatedAt)}.
+          </p>
+          <ShareDialog collection={collection} />
+        </div>
       </section>
 
       <Separator />
@@ -145,7 +158,7 @@ export function KeptCollection({ collectionId }: { collectionId: string }) {
                     </span>
                     <span className="KeptStack KeptStack-0">
                       <span className="KeptText1 KeptFigureName">{r.title}</span>
-                      <span className="KeptText1 KeptMuted KeptTruncate">{r.source}</span>
+                      <span className="KeptText1 KeptMuted KeptTruncate">{sourceLabel(r.captureUrl)}</span>
                     </span>
                   </a>
                 </li>
@@ -158,8 +171,10 @@ export function KeptCollection({ collectionId }: { collectionId: string }) {
                   <a className="KeptRefRow" href={`#/kept/library/${collection.id}/${r.id}`}>
                     <span className="KeptImage KeptImageThumb" aria-hidden />
                     <span className="KeptText2 KeptFigureName">{r.title}</span>
-                    <span className="KeptText1 KeptMuted KeptRefRowMeta KeptTruncate">{r.source}</span>
-                    <span className="KeptText1 KeptMuted KeptRefRowYear">{r.year}</span>
+                    <span className="KeptText1 KeptMuted KeptRefRowMeta KeptTruncate">
+                      {sourceLabel(r.captureUrl)}
+                    </span>
+                    <span className="KeptText1 KeptMuted KeptRefRowYear">{r.fileType}</span>
                   </a>
                 </li>
               ))}

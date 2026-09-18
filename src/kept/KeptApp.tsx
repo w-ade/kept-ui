@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button } from '@base-ui/react/button';
+import { KeptBoard } from './KeptBoard.tsx';
 import { KeptCollection } from './KeptCollection.tsx';
 import { KeptLanding } from './KeptLanding.tsx';
 import { KeptLibrary } from './KeptLibrary.tsx';
@@ -13,7 +14,7 @@ import './kept.css';
 // Shells are modeled on the base-ui.com homepage ((website)/layout.tsx + page.tsx):
 // an 8-column grid where sections are `display: contents` and labels sit in the left gutter.
 
-type Shell = 'marketing' | 'auth' | 'app';
+type Shell = 'marketing' | 'auth' | 'app' | 'board';
 
 const MARKETING_NAV = [
   { href: '#/kept', label: 'Landing', route: '' },
@@ -37,6 +38,7 @@ const COMING_NEXT: Record<string, string> = {
 };
 
 function shellFor(route: string): Shell {
+  if (route.startsWith('m/')) return 'board';
   if (route.startsWith('login') || route === 'request') return 'auth';
   if (route === 'library' || route.startsWith('library/')) return 'app';
   return 'marketing';
@@ -65,7 +67,7 @@ export function KeptApp({ route }: { route: string }) {
   React.useEffect(() => {
     const previous = document.title;
     // Collection and reference pages title themselves once their data loads.
-    if (!route.startsWith('library/')) document.title = TITLES[route] ?? 'KEPT';
+    if (!route.startsWith('library/') && !route.startsWith('m/')) document.title = TITLES[route] ?? 'KEPT';
     return () => {
       document.title = previous;
     };
@@ -74,6 +76,8 @@ export function KeptApp({ route }: { route: string }) {
   if (redirecting) return null;
 
   const shell = shellFor(route);
+  // Board shell: a shared, read-only page with no site chrome and no sign-in.
+  if (shell === 'board') return <KeptBoard key={route} token={route.slice(2)} />;
   const nav = shell === 'app' ? APP_NAV : shell === 'auth' ? AUTH_NAV : MARKETING_NAV;
   const session = getSession();
 
