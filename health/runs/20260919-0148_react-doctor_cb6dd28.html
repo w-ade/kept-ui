@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>kept-ui: React Doctor report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: Inter, sans-serif;
+      background: #fff;
+      color: #000;
+      margin: 32px;
+      max-width: 42em;
+      line-height: 1.5;
+    }
+    h1, h2, h3 {
+      font-weight: 400;
+    }
+    pre {
+      font-family: Inter, sans-serif;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>kept-ui: React Doctor report</h1>
+
+  <p>A full scan of <code>kept-ui</code> with <a href="https://react.doctor/docs">React Doctor</a> 0.9.14, run on September 19, 2026 at 01:48 against commit <code>cb6dd28</code>. Run ID <code>20260919-0148_react-doctor_cb6dd28</code>.</p>
+
+  <pre>Score        63 / 100, Needs work
+Files        162 scanned, 31 with findings
+Findings     50 warnings, 0 errors</pre>
+
+  <h2>By category</h2>
+  <ul>
+    <li><strong>Maintainability:</strong> 30 warnings.</li>
+    <li><strong>Performance:</strong> 9 warnings.</li>
+    <li><strong>Bugs:</strong> 8 warnings.</li>
+    <li><strong>Security:</strong> 2 warnings.</li>
+    <li><strong>Accessibility:</strong> 1 warning.</li>
+  </ul>
+
+  <h2>Where the findings live</h2>
+  <ul>
+    <li><strong>26 in Kept code</strong> (<code>src/kept</code>). This is the code that matters.</li>
+    <li><strong>22 in the copied demos</strong> (<code>src/demos</code>). These are verbatim copies of the Base UI docs demos, so they are best left as they are.</li>
+    <li><strong>2 in project config.</strong> Both are about <code>pnpm-workspace.yaml</code>, which no longer exists.</li>
+  </ul>
+
+  <h2>Kept code, worth fixing</h2>
+  <ol>
+    <li><strong>Loading flag reset outside <code>finally</code> (5).</strong> A busy flag is only cleared on success. If the request fails, the spinner or disabled button stays stuck. Move the reset into a <code>finally</code> block.
+      <ul>
+        <li><code>src/kept/KeptLibrary.tsx:151</code></li>
+        <li><code>src/kept/KeptLogin.tsx:50</code></li>
+        <li><code>src/kept/KeptRequest.tsx:62</code></li>
+        <li><code>src/kept/KeptShare.tsx:36</code></li>
+        <li><code>src/kept/KeptUpload.tsx:43</code></li>
+      </ul>
+    </li>
+    <li><strong>Array index used as a key (1).</strong> Index keys can attach the wrong state to a row when a list reorders or items are removed. Use a stable id.
+      <ul>
+        <li><code>src/kept/KeptUpload.tsx:123</code></li>
+      </ul>
+    </li>
+    <li><strong><code>createObjectURL</code> without <code>revokeObjectURL</code> (3).</strong> Each object URL holds its image blob in memory until it is revoked. With a 160-image collection this adds up.
+      <ul>
+        <li><code>src/kept/repository.ts:161</code></li>
+        <li><code>src/kept/repository.ts:162</code></li>
+        <li><code>src/kept/uploads.ts:81</code></li>
+      </ul>
+    </li>
+    <li><strong><code>await</code> inside a loop (1).</strong> Independent calls run one after another. <code>Promise.all</code> would run them together, if they really are independent.
+      <ul>
+        <li><code>src/kept/repository.ts:252</code></li>
+      </ul>
+    </li>
+    <li><strong>Array lookup inside a loop (2).</strong> <code>includes()</code> is called inside a loop. A <code>Set</code> is faster, though at To do list sizes it hardly matters.
+      <ul>
+        <li><code>src/kept/KeptTodo.tsx:89</code></li>
+        <li><code>src/kept/KeptTodo.tsx:218</code></li>
+      </ul>
+    </li>
+    <li><strong>High complexity in <code>KeptApp</code> (1).</strong> Cyclomatic complexity 19 and cognitive complexity 20. Pulling the routing branches out into a hook or small components would make it easier to follow.
+      <ul>
+        <li><code>src/kept/KeptApp.tsx:74</code></li>
+      </ul>
+    </li>
+    <li><strong>Non-component exports in component files (13).</strong> Two rules report the same thing: <code>react/only-export-components</code> (7) and <code>react-doctor/only-export-components</code> (6). The files export helpers next to components, so Fast Refresh does a full reload instead of keeping state. It only affects development.
+      <ul>
+        <li><code>src/kept/KeptShare.tsx:16</code></li>
+        <li><code>src/kept/parts.tsx</code> lines 73, 79, 84, 91, 100 and 128</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2>Copied demos, leave alone</h2>
+  <ul>
+    <li><strong>Duplicated JSX structure (14).</strong> The demos repeat similar trees on purpose. Each one is meant to stand alone.</li>
+    <li><strong>State only used in handlers (3).</strong> The toast demos keep a <code>count</code> in state that is never rendered: <code>toast/hero</code>, <code>toast/position</code> and <code>toast/varying-heights</code>.</li>
+    <li><strong>Array index used as a key (2).</strong> In <code>autocomplete/fuzzy-matching</code> and <code>menu/detached-triggers-controlled</code>.</li>
+    <li><strong>Non-component export (2).</strong> In <code>autocomplete/grid</code>, reported by both rules.</li>
+    <li><strong>Placeholder used as the only label (1).</strong> In <code>combobox/creatable</code>.</li>
+  </ul>
+  <p>Changing these would make the lab drift from base-ui.com, which is the reference the demos are there to match.</p>
+
+  <h2>Project config</h2>
+  <p><code>require-pnpm-hardening</code> fires twice because there is no <code>pnpm-workspace.yaml</code> with <code>minimumReleaseAge</code>. That file was removed along with the doctor tool. Adding it back with <code>minimumReleaseAge: 10080</code> would delay installing any newly published package version by seven days. It's optional hardening, not a bug.</p>
+
+  <h2>Suggested order</h2>
+  <ol>
+    <li><strong>First:</strong> the five loading-flag resets. They are small, safe and prevent real stuck states.</li>
+    <li><strong>Next:</strong> revoke object URLs and fix the upload list key.</li>
+    <li><strong>Then:</strong> the <code>await</code> loop in <code>repository.ts</code>, after checking the calls really are independent.</li>
+    <li><strong>Later, if wanted:</strong> split <code>KeptApp</code>, move helpers out of <code>parts.tsx</code>, and use a <code>Set</code> in <code>KeptTodo</code>.</li>
+  </ol>
+
+  <h2>Rerun</h2>
+  <pre>npx react-doctor@latest
+npx react-doctor@latest --verbose --scope changed</pre>
+
+  <p>kept-ui · React Doctor 0.9.14 · September 19, 2026</p>
+</body>
+</html>
